@@ -1,0 +1,165 @@
+{% extends 'layout.html' %}
+{% block title %} Hotel Management System {% endblock %}
+{% block head_scripts %}
+  <script type="text/javascript" src="../scripts/settings.js"></script>
+  <link rel="stylesheet" href="../style/settings.css" />
+
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+
+    <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="./home.html">Home</a>
+          </li>
+          <li class="nav-item active">
+            <a data-screen="roomRender" class="nav-link" href="#">Room</a>
+          </li>
+          <li class="nav-item">
+            <a data-screen="serviceRender" class="nav-link" href="#">Service</a>
+          </li>
+          <li class="nav-item">
+            <a data-screen="employeeRender" class="nav-link" href="#">Employee</a>
+          </li>
+          <li class="nav-item">
+            <a data-screen="taxRender" class="nav-link" href="#">Tax</a>
+          </li>
+          <li class="nav-item">
+            <a data-screen="taxRender" class="nav-link" href="#">Referal</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="p-4 mt-2" style="display: block;" id="roomRender">
+      <!-- CRUD Rooms-->
+      <div style="width: 50%;display: inline;float: left;">
+        <div class="row p-3">
+          <input class="form-control my-2" type="text" placeholder="Room Identity">
+          <input class="form-control my-2" type="number" placeholder="Room Cost">
+
+          <div class="my-2">
+
+            <span style="display: inline;float: left;">Room Type :</span> 
+            <div style="display: inline;float: left;" class="ml-2 custom-control custom-radio">
+              <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
+              <label class="custom-control-label" for="customRadio1">AC</label>
+            </div>
+            <div style="display: inline;float: left;" class="ml-4 custom-control custom-radio">
+              <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+              <label class="custom-control-label" for="customRadio2">Non AC</label>
+            </div>
+
+          </div>
+                
+          <select class="custom-select my-2">
+            <option selected>Bed Type</option>
+            <option value="1">Single</option>
+            <option value="2">Double</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-primary">&#10010;</button>
+        <button type="button" class="btn btn-warning">&#9998;</button>
+        <button type="button" class="btn btn-danger">&#9866;</button>
+        <button type="button" class="btn btn-success">&#9851;</button>
+        <button type="button" class="btn btn-primary">Upload XLS</button>
+      </div>
+
+      <!-- Table Rooms-->
+      <div style="width: 50%;display: inline;float: left;">
+        <div class="p-3">
+          <table class="table">
+            <tbody>
+              <tr>
+                <td>
+                  <div>GF01</div>
+                  <div>Rs.900</div>
+                  <div>AC</div>
+                  <div>Double</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div>FF01</div>
+                  <div>Rs.900</div>
+                  <div>AC</div>
+                  <div>Double</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="p-4 mt-2" style="display: none;" id="serviceRender">
+      <!-- CRUD Services-->
+      <div style="width: 50%;display: inline;float: left;">
+        <div class="row p-3">
+          <input class="form-control my-2" type="text" placeholder="Item Name">
+          <input class="form-control my-2" type="number" placeholder="Item Cost">
+
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <input type="checkbox">
+              </div>
+            </div>
+            <input type="text" class="form-control" value="Available" readonly>
+          </div>
+      
+        </div>
+        <button type="button" class="btn btn-primary">&#10010;</button>
+        <button type="button" class="btn btn-warning">&#9998;</button>
+        <button type="button" class="btn btn-danger">&#9866;</button>
+        <button type="button" class="btn btn-success">&#9851;</button>
+        <button type="button" class="btn btn-primary">Upload XLS</button>
+      </div>
+
+      <!-- Table Rooms-->
+      <div style="width: 50%;display: inline;float: left;">
+        <div class="p-3">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>7Up</td>
+                <td>&#8377;10</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Extra Bed</td>
+                <td>&#8377;30</td>
+              </tr>
+            </tbody>
+          </table>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="p-4 mt-2" style="display: none;" id="employeeRender">
+      Employee Screen
+      <input type="time" id="birthday" name="birthday">
+    </div>
+
+    <div class="p-4 mt-2" style="display: none;" id="taxRender">
+      Tax Screen
+    </div>
+
+  </div>
+{% endblock %}
