@@ -16,7 +16,7 @@
       <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="./home.html">Home</a>
+            <a class="nav-link" href="./home.html"><strong>&#10229;</strong></a>
           </li>
           <li class="nav-item active">
             <a data-screen="roomRender" class="nav-link" href="#">Room</a>
@@ -28,128 +28,209 @@
             <a data-screen="employeeRender" class="nav-link" href="#">Employee</a>
           </li>
           <li class="nav-item">
-            <a data-screen="taxRender" class="nav-link" href="#">Tax</a>
-          </li>
-          <li class="nav-item">
-            <a data-screen="taxRender" class="nav-link" href="#">Referal</a>
+            <a data-screen="refRender" class="nav-link" href="#">Referral</a>
           </li>
         </ul>
       </div>
     </nav>
 
-    <div class="p-4 mt-2" style="display: block;" id="roomRender">
-      <!-- CRUD Rooms-->
-      <div style="width: 50%;display: inline;float: left;">
-        <div class="row p-3">
-          <input class="form-control my-2" type="text" placeholder="Room Identity">
-          <input class="form-control my-2" type="number" placeholder="Room Cost">
-
-          <div class="my-2">
-
-            <span style="display: inline;float: left;">Room Type :</span> 
-            <div style="display: inline;float: left;" class="ml-2 custom-control custom-radio">
-              <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
-              <label class="custom-control-label" for="customRadio1">AC</label>
-            </div>
-            <div style="display: inline;float: left;" class="ml-4 custom-control custom-radio">
-              <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
-              <label class="custom-control-label" for="customRadio2">Non AC</label>
-            </div>
-
-          </div>
-                
-          <select class="custom-select my-2">
-            <option selected>Bed Type</option>
-            <option value="1">Single</option>
-            <option value="2">Double</option>
-          </select>
-        </div>
-        <button type="button" class="btn btn-primary">&#10010;</button>
-        <button type="button" class="btn btn-warning">&#9998;</button>
-        <button type="button" class="btn btn-danger">&#9866;</button>
-        <button type="button" class="btn btn-success">&#9851;</button>
-        <button type="button" class="btn btn-primary">Upload XLS</button>
-      </div>
-
-      <!-- Table Rooms-->
-      <div style="width: 50%;display: inline;float: left;">
-        <div class="p-3">
-          <table class="table">
-            <tbody>
-              <tr>
-                <td>
-                  <div>GF01</div>
-                  <div>Rs.900</div>
-                  <div>AC</div>
-                  <div>Double</div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div>FF01</div>
-                  <div>Rs.900</div>
-                  <div>AC</div>
-                  <div>Double</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="p-4 mt-2" style="display: none;" id="serviceRender">
-      <!-- CRUD Services-->
-      <div style="width: 50%;display: inline;float: left;">
-        <div class="row p-3">
-          <input class="form-control my-2" type="text" placeholder="Item Name">
-          <input class="form-control my-2" type="number" placeholder="Item Cost">
-
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <div class="input-group-text">
-                <input type="checkbox">
-              </div>
-            </div>
-            <input type="text" class="form-control" value="Available" readonly>
-          </div>
+    <div class="p-4 mt-2 d-flex justify-content-center" id="roomRender">
       
-        </div>
-        <button type="button" class="btn btn-primary">&#10010;</button>
-        <button type="button" class="btn btn-warning">&#9998;</button>
-        <button type="button" class="btn btn-danger">&#9866;</button>
-        <button type="button" class="btn btn-success">&#9851;</button>
-        <button type="button" class="btn btn-primary">Upload XLS</button>
-      </div>
-
       <!-- Table Rooms-->
       <div style="width: 50%;display: inline;float: left;">
+        <div class="d-flex justify-content-end">
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#addRoomModal">
+            Add Room
+          </button>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#roomTypeModal">
+            Add Room Type
+          </button>
+        </div>
         <div class="p-3">
           <table class="table">
             <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Cost</th>
-              </tr>
+              <th>Room#</th>
+              <th>Room Type</th>
+              <th>Room Cost</th>
             </thead>
             <tbody>
               <tr>
-                <th scope="row">1</th>
-                <td>7Up</td>
-                <td>&#8377;10</td>
+                <td>GF01</td>
+                <td>Deluxe</td>
+                <td>Rs.900</td>
               </tr>
               <tr>
-                <th scope="row">2</th>
-                <td>Extra Bed</td>
-                <td>&#8377;30</td>
+                <td>GF01</td>
+                <td>Deluxe</td>
+                <td>Rs.900</td>
               </tr>
             </tbody>
           </table>
-          
         </div>
       </div>
+
+      <!-- Add Room Modal-->
+
+      <div class="modal" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="addRoomModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addRoomModalLabel">Add Room</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- CRUD Operation-->
+              <div class="row p-3">
+                <input class="form-control my-2" type="text" placeholder="Room Identity" />
+                <input class="form-control my-2" type="number" placeholder="Room Cost" />
+                      
+                <select class="custom-select my-2">
+                  <option selected>Room Type</option>
+                  <option value="1">Deluxe</option>
+                  <option value="2">Suite</option>
+                </select>
+              </div>
+
+              <div class="d-flex justify-content-center">
+
+                <button type="button" class="btn btn-primary mx-1" data-toggle="tooltip" 
+                data-placement="bottom" title="Add Room">&#10010;</button>
+                <button type="button" class="btn btn-warning mx-1" data-toggle="tooltip" 
+                data-placement="bottom" title="Update Room">&#9998;</button>
+                <button type="button" class="btn btn-danger mx-1" data-toggle="tooltip" 
+                data-placement="bottom" title="Delete Room">&#9866;</button>
+                <button type="button" class="btn btn-success mx-1" data-toggle="tooltip" 
+                data-placement="bottom" title="Clear Fields">&#9851;</button>
+                <button type="button" class="btn btn-primary mx-1" data-toggle="tooltip" 
+                data-placement="bottom" title="Upload Excel">&#10514;</button>
+
+              </div>
+
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Room Type Modal -->
+      <div class="modal" id="roomTypeModal" tabindex="-1" role="dialog" aria-labelledby="roomTypeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="roomTypeModalLabel">Add Room Type</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- Service Screen -->
+    <div class="p-4 mt-2 d-none justify-content-center" id="serviceRender">
+      
+       <!-- Table Service-->
+       <div style="width: 50%;display: inline;float: left;">
+        <div class="d-flex justify-content-end">
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#addServiceModal">
+            Add Service
+          </button>
+        </div>
+        <div class="p-3">
+          <table class="table">
+            <thead>
+              <th>#</th>
+              <th>Service Name</th>
+              <th>Service Cost</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>7Up</td>
+                <td>Rs.10</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Extra Bed</td>
+                <td>Rs.30</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Add Service Modal-->
+
+      <div class="modal" id="addServiceModal" tabindex="-1" role="dialog" aria-labelledby="addServiceModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addServiceModalLabel">Add Service</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- CRUD Operation-->
+              <div class="row p-3">
+                
+                <select class="custom-select my-2">
+                  <option selected>Service Name</option>
+                  <option value="1">Other</option>
+                  <option value="1">7Up</option>
+                  <option value="2">Extra Bed</option>
+                </select>
+
+                <input class="form-control my-2" type="text" placeholder="New Service Name" />
+                <input class="form-control my-2" type="number" placeholder="Service Cost" />
+                      
+                
+              </div>
+
+              <div class="d-flex justify-content-center">
+
+                <button type="button" class="btn btn-primary mx-1" data-toggle="tooltip" 
+                data-placement="bottom" title="Add Room">&#10010;</button>
+                <button type="button" class="btn btn-warning mx-1" data-toggle="tooltip" 
+                data-placement="bottom" title="Update Room">&#9998;</button>
+                <button type="button" class="btn btn-danger mx-1" data-toggle="tooltip" 
+                data-placement="bottom" title="Delete Room">&#9866;</button>
+                <button type="button" class="btn btn-success mx-1" data-toggle="tooltip" 
+                data-placement="bottom" title="Clear Fields">&#9851;</button>
+                <button type="button" class="btn btn-primary mx-1" data-toggle="tooltip" 
+                data-placement="bottom" title="Upload Excel">&#10514;</button>
+
+              </div>
+
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div class="p-4 mt-2" style="display: none;" id="employeeRender">
@@ -157,9 +238,15 @@
       <input type="time" id="birthday" name="birthday">
     </div>
 
-    <div class="p-4 mt-2" style="display: none;" id="taxRender">
-      Tax Screen
+    <div class="p-4 mt-2" style="display: none;" id="refRender">
+      Referral Screen
     </div>
 
+    <script>
+      $(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
+    
   </div>
 {% endblock %}

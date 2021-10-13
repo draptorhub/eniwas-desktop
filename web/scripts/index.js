@@ -96,8 +96,29 @@ $(document).ready(function(){
     })
 
    
-    $("#resetWordFile").click(function(){
-        location.reload();
+    $("#loginButton").click(function(){
+
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/login/mngrlogin"
+        var data = {
+            mid:"M-00000001",
+            mpass:"123Suguna",
+            bid:"BID-0000000001"
+        }
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(data){
+                if(data["success"])
+                    window.location.replace('./home.html')
+                else
+                    alert("Branch ID/Manager ID/Password might be incorrect!");
+            }
+          });
+
+        //window.location.replace('./home.html')
+        //location.reload();
     })
     
 });

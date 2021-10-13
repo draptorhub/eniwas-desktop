@@ -12,8 +12,8 @@ $( document ).ready(function() {
             console.log("Home Value : "+selectedScreen);
             $(".nav-link").parent().removeClass("active");
             $(this).parent().addClass("active");
-            $(scrOn).css({"display":"none"});
-            $(selectedScreen).css({"display":"block"});
+            $(scrOn).removeClass("d-flex").addClass("d-none");
+            $(selectedScreen).addClass("d-flex").removeClass("d-none");
             scrOn = selectedScreen;
 
         }
