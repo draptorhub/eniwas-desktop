@@ -40,7 +40,7 @@
       <div style="width: 50%;display: inline;float: left;">
         <div class="d-flex justify-content-end">
           <!-- Button trigger modal -->
-          <button id="btnRoomModal" type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#addRoomModal">
+          <button type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#addRoomModal">
             Add Room
           </button>
           <!-- Button trigger modal -->
@@ -49,7 +49,7 @@
           </button>
         </div>
         <div class="p-3">
-          <table id="roomTable" class="table">
+          <table class="table">
             <thead>
               <th>Room#</th>
               <th>Room Type</th>
@@ -57,14 +57,14 @@
             </thead>
             <tbody>
               <tr>
-                <td class="roomName" id="RID-00001">GF01</td>
-                <td class="roomType" id="RTID-00001">Deluxe</td>
-                <td class="roomCost">Rs.900</td>
+                <td>GF01</td>
+                <td>Deluxe</td>
+                <td>Rs.900</td>
               </tr>
               <tr>
-                <td class="roomName" id="RID-00002">GF02</td>
-                <td class="roomType" id="RTID-00002">Suite</td>
-                <td class="roomCost">Rs.1200</td>
+                <td>GF01</td>
+                <td>Deluxe</td>
+                <td>Rs.900</td>
               </tr>
             </tbody>
           </table>
@@ -85,12 +85,13 @@
             <div class="modal-body">
               <!-- CRUD Operation-->
               <div class="row p-3">
-                <input id="inprName" class="form-control my-2" type="text" placeholder="Room Identity" />
+                <input class="form-control my-2" type="text" placeholder="Room Identity" />
+                <input class="form-control my-2" type="number" placeholder="Room Cost" />
                       
-                <select id="inprType" class="custom-select my-2">
-                  <option selected value="-999">Room Type</option>
-                  <option value="RTID-00001">Deluxe</option>
-                  <option value="RTID-00002">Suite</option>
+                <select class="custom-select my-2">
+                  <option selected>Room Type</option>
+                  <option value="1">Deluxe</option>
+                  <option value="2">Suite</option>
                 </select>
               </div>
 
@@ -104,75 +105,38 @@
                 data-placement="bottom" title="Delete Room">&#9866;</button>
                 <button type="button" class="btn btn-success mx-1" data-toggle="tooltip" 
                 data-placement="bottom" title="Clear Fields">&#9851;</button>
-                <!-- <button type="button" class="btn btn-primary mx-1" data-toggle="tooltip" 
-                data-placement="bottom" title="Upload Excel">&#10514;</button> -->
+                <button type="button" class="btn btn-primary mx-1" data-toggle="tooltip" 
+                data-placement="bottom" title="Upload Excel">&#10514;</button>
 
               </div>
 
               
             </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Room Type Modal -->
+      <!-- Add Room Type Modal -->
       <div class="modal" id="roomTypeModal" tabindex="-1" role="dialog" aria-labelledby="roomTypeModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="roomTypeModalLabel">Room Type</h5>
+              <h5 class="modal-title" id="roomTypeModalLabel">Add Room Type</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
             <div class="modal-body">
-
-              <select id="inprType" class="custom-select my-2">
-                <option selected value="-999">Select Room Type</option>
-                <option value="-1">Create Type</option>
-                <option value="RTID-00003">Gold</option>
-                <option value="RTID-00004">Platinum</option>
-              </select>
-
-              <input id="newRoomType" class="form-control my-2" type="text" placeholder="New Room Type" readonly/>
-              <input id="editRoomCost" class="form-control my-2" type="text" placeholder="Room Cost" />
-
-              <div class="d-flex justify-content-center">
-
-                <button type="button" class="btn btn-primary mx-1" data-toggle="tooltip" 
-                data-placement="bottom" title="Add">&#10010;</button>
-                <button type="button" class="btn btn-warning mx-1" data-toggle="tooltip" 
-                data-placement="bottom" title="Update" disabled>&#9998;</button>
-                <button type="button" class="btn btn-danger mx-1" data-toggle="tooltip" 
-                data-placement="bottom" title="Delete" disabled>&#9866;</button>
-                <button type="button" class="btn btn-success mx-1" data-toggle="tooltip" 
-                data-placement="bottom" title="Clear Fields">&#9851;</button>
-                <!-- <button type="button" class="btn btn-primary mx-1" data-toggle="tooltip" 
-                data-placement="bottom" title="Upload Excel">&#10514;</button> -->
-
-              </div>
-
-              <div class="p-3">
-                <table id="rtypeTable" class="table">
-                  <thead>
-                    <th>Room Type</th>
-                    <th>Room Cost</th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="roomType" id="RTID-00001">Deluxe</td>
-                      <td class="roomCost">Rs.900</td>
-                    </tr>
-                    <tr>
-                      <td class="roomType" id="RTID-00002">Suite</td>
-                      <td class="roomCost">Rs.1200</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
+              ...
             </div>
-            
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
           </div>
         </div>
       </div>

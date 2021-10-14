@@ -98,20 +98,11 @@ $(document).ready(function(){
    
     $("#loginButton").click(function(){
 
-        let mid = $("input[name=managerId]").val();
-        let bid = $("input[name=branchId]").val();
-        let mpass = $("input[name=mngrPass]").val();
-
-        if(mid=='' || bid=='' || mpass==''){
-            alert("No fields must be empty!");
-            return;
-        }
-
         let url = "http://"+enviVar.host+":"+enviVar.port+"/api/login/mngrlogin"
         var data = {
-            mid:mid,
-            mpass:mpass,
-            bid:bid
+            mid:"M-00000001",
+            mpass:"123Suguna",
+            bid:"BID-0000000001"
         }
 
         $.ajax({
