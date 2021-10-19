@@ -3,6 +3,59 @@ $( document ).ready(function() {
     
     var scrOn = "#roomRender";
 
+    populateRooms = async () => {
+
+        let bid = await eel.get_branchId()();
+        let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/room/frontlist/"+bid
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(data){
+                $("#roomTable tbody").html(renderRoomTable(data["data"]))
+                add_tableroom_rowclick()
+            }
+        });
+
+
+    }
+
+    renderSelectOptions = (data) => {
+        let html = ''
+        html+='<option selected value="-999">Room Type</option>'
+        data.forEach(item => {
+            html+=`<option value="${item['roomTypeId']}">${item['roomTypeName']}</option>`
+        });
+        $("#addRoomModal #inprType").html(html)
+    }
+
+    populate_roomTypes = async () => {
+        let bid = await eel.get_branchId()();
+        let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/roomtypebranch/get/"+bid
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(data){
+                renderSelectOptions(data["data"]);
+            }
+        });
+    }
+
+    renderRoomTable = (data) => {
+        let h = ''
+        data.forEach(r => {
+           let s = ''
+            s =  `<tr>
+            <td class="roomName" id="${r['roomId']}">${r['roomName']}</td>
+            <td class="roomType" id="${r['roomType']}">${r['rtname']}</td>
+            <td class="roomCost">${r['roomTypeCost']}</td>
+          </tr>`
+          h+=s
+        });
+        return h
+    }
+
     $("#btnRoomModal").click(function(){
         resRoomModal();
         $("#addRoomModal .d-flex.justify-content-center .btn.btn-warning.mx-1").prop('disabled', true);
@@ -43,13 +96,15 @@ $( document ).ready(function() {
         resRoomType()
     })
 
-    $("#roomRender #roomTable tr").click(function(){
-        //console.log('first col : ',$(this).children('.roomName').html())
-        let rid = $(this).children('.roomName').attr('id')
-        let rname = $(this).children('.roomName').html()
-        let rtype = $(this).children('.roomType').attr('id')
-        editRoomModal(rid,rname,rtype)
-    })
+    add_tableroom_rowclick = () => {
+        $("#roomRender #roomTable tr").click(function(){
+            //console.log('first col : ',$(this).children('.roomName').html())
+            let rid = $(this).children('.roomName').attr('id')
+            let rname = $(this).children('.roomName').html()
+            let rtype = $(this).children('.roomType').attr('id')
+            editRoomModal(rid,rname,rtype)
+        })
+    }
 
     $("#roomRender #rtypeTable tr").click(function(){
         //console.log('first col : ',$(this).children('.roomName').html())
@@ -68,6 +123,16 @@ $( document ).ready(function() {
         $("#addRoomModal .d-flex.justify-content-center .btn.btn-danger.mx-1").prop('disabled', false);
         $("#inprName").val("");
         $("#inprType").val("-999").change();
+    }
+
+    const getBranchRooms = () => {
+        $.ajax({
+            type: "GET",
+            url: 'http://localhost:3000/api/room/get/BID-0000000003',
+            success: function(data){
+                console.log('data:',data)
+            }
+        });
     }
 
     const resRoomType = () => {
@@ -138,5 +203,7 @@ $( document ).ready(function() {
     });
 
 
+    populateRooms();
+    populate_roomTypes();
 
 });

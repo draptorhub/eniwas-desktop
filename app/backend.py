@@ -7,71 +7,55 @@ class Database:
     conn = None
 
     def __init__(self,db):
-        self.conn = sql3.connect("./app/"+db)
-        #self.conn = sql3.connect(db)
+        self.conn = sql3.connect(db)
         self.create_tables()
 
     def create_tables(self):
-        self.create_owner_table()
-        self.create_building_table()
+        self.create_login_details()
         self.conn.commit()
 
-    def create_owner_table(self):
+    def create_login_details(self):
         sql = '''
-            CREATE TABLE IF NOT EXISTS `owner` (
-                `oid`	INTEGER PRIMARY KEY AUTOINCREMENT,
-                `oname`	TEXT,
-                `olabel`	TEXT,
-                `odob`	TEXT,
-                `ogen`	INTEGER,
-                `ofather`	TEXT,
-                `oaddr`	TEXT
-            );     
-        '''
-        self.conn.execute(sql)
-
-    def create_building_table(self):
-        sql = '''
-            CREATE TABLE IF NOT EXISTS `building` (
-                `bid`	INTEGER PRIMARY KEY AUTOINCREMENT,
+            CREATE TABLE IF NOT EXISTS `login-details` (
+                `bid`	TEXT NOT NULL,
                 `bname`	TEXT,
-                `baddress`	TEXT,
-                `bpic`	TEXT,
-                `oid`	INTEGER
+                `hname`	TEXT,
+                `mname`	TEXT,
+                PRIMARY KEY(`bid`)
             );
         '''
         self.conn.execute(sql)
 
-    def dict_format(self,data):
-        d = {}
-        d["bname"] = data[0]
-        d["baddr"] = data[1]
-        d["oname"] = data[2]
-        d["odob"] = data[3]
-        t = [int(i) for i in data[3].split("-")]
-        t.reverse()
-        dob = datetime.date(t[0],t[1],t[2])
-        today = datetime.date.today()
-        age = today.year - dob.year
-        d["oage"] = age
-        d["ogen"] = "Male" if data[4]==1 else "Female"
-        d["odad"] = data[5]
-        d["oaddr"] = data[6]
-        d["bpic"] = data[7]
-        d["bid"] = data[8]
-        d["oid"] = data[9]
-        return d
-
-    def get_buildings_frontend(self):
-        sql = "select b.bname,b.baddress,o.oname,o.odob,o.ogen,o.ofather,o.oaddr,bpic,b.bid,o.oid from owner o,building b where o.oid=b.oid;"
+    def get_login_details(self):
+        sql = "select * from `login-details` limit 1;"
         cursor = self.conn.execute(sql)
-        l = []
-        for row in cursor:
-            j = self.dict_format(row)
-            y = json.dumps(j)
-            l.append(y)
-        return l
+        t = cursor.fetchone()
+        d = {
+            #'bid':str(t[0]),
+            'bname':str(t[1]),
+            'hname':str(t[2]),
+            'mname':str(t[3])
+        }
+        #print('data : ',d)
+        y = json.dumps(d)
+        return y
+
+    def get_branchId(self):
+        sql = "select bid from `login-details` limit 1;"
+        cursor = self.conn.execute(sql)
+        t = cursor.fetchone()
+        y = str(t[0])
+        return y
+        
+
+    def register_login_details(self,data):
+        sql = 'insert or replace into `login-details` values(?,?,?,?)'
+        cur = self.conn.cursor()
+        cur.execute(sql,data)
+        self.conn.commit()
+
 
 if __name__ == "__main__":
-    d = Database("test_db.db")
-    d.get_buildings_frontend()
+    d = Database("eniwas_test.db")
+    #d.get_login_details()
+    d.get_branchId()

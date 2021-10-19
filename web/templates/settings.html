@@ -1,6 +1,9 @@
 {% extends 'layout.html' %}
 {% block title %} Hotel Management System {% endblock %}
 {% block head_scripts %}
+<script>
+  console.log($)
+</script>
   <script type="text/javascript" src="../scripts/settings.js"></script>
   <link rel="stylesheet" href="../style/settings.css" />
 
@@ -56,16 +59,7 @@
               <th>Room Cost</th>
             </thead>
             <tbody>
-              <tr>
-                <td class="roomName" id="RID-00001">GF01</td>
-                <td class="roomType" id="RTID-00001">Deluxe</td>
-                <td class="roomCost">Rs.900</td>
-              </tr>
-              <tr>
-                <td class="roomName" id="RID-00002">GF02</td>
-                <td class="roomType" id="RTID-00002">Suite</td>
-                <td class="roomCost">Rs.1200</td>
-              </tr>
+              
             </tbody>
           </table>
         </div>
@@ -275,7 +269,7 @@
     </div>
 
     <div class="p-4 mt-2" style="display: none;" id="refRender">
-      Referral Screen
+      referralrender
     </div>
 
     <script>
