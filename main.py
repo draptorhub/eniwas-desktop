@@ -12,9 +12,7 @@ def main():
     global d
     d = Database("./app/eniwas_test.db")
     eel.init('web')
-    eel.start('templates/index.html',jinja_templates='templates',mode='chrome', 
-                        host='localhost', 
-                        port=27000)    # Start
+    eel.start('templates/index.html',jinja_templates='templates')    # Start
 
 @eel.expose
 def getTime(data):
