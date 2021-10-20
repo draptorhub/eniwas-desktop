@@ -4,15 +4,11 @@ import os,sys
 import json, ast
 from app.backend import Database
 
-def on_close(page, sockets):
-	print(page,'closed')
-	print('Still have sockets open to',sockets)
-
 def main():
     global d
     d = Database("./app/eniwas_test.db")
     eel.init('web')
-    eel.start('templates/index.html',jinja_templates='templates')    # Start
+    eel.start('templates/index.html',jinja_templates='templates',port=0)    # Start
 
 @eel.expose
 def getTime(data):

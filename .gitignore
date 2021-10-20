@@ -1,3 +1,6 @@
 hmsvenv
 *.db
 latestpull.bat
+dist
+distvenv
+build
