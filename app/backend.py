@@ -40,6 +40,11 @@ class Database:
         y = json.dumps(d)
         return y
 
+    def del_login(self):
+        sql = "delete from `login-details`;"
+        self.conn.execute(sql)
+        self.conn.commit()
+
     def get_branchId(self):
         sql = "select bid from `login-details` limit 1;"
         cursor = self.conn.execute(sql)
@@ -47,7 +52,6 @@ class Database:
         y = str(t[0])
         return y
         
-
     def register_login_details(self,data):
         sql = 'insert or replace into `login-details` values(?,?,?,?)'
         cur = self.conn.cursor()

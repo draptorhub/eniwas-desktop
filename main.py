@@ -25,6 +25,10 @@ def get_login_details():
     return d.get_login_details()
 
 @eel.expose
+def delete_login():
+    return d.del_login()
+
+@eel.expose
 def get_branchId():
     return d.get_branchId()
 

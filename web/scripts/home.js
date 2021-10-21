@@ -10,6 +10,10 @@ $(document).ready(function () {
         checkinAction();
     })
 
+    quitApp = async () => {
+        await eel.delete_login()();
+    }
+
     checkinAction = async () => {
 
         console.log("it has been submitted");
