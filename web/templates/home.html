@@ -35,7 +35,7 @@
             <span id="mname">Manager Name</span>
           </p>
           <li>
-              <a href="#">EDIT</a>
+              <a href="#">Revise</a>
           </li>
           <li>
               <a href="#">History</a>
@@ -655,50 +655,56 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <form id="checkOutForm">
       <div class="modal-body" style="height: 500px;overflow-y: scroll;">
         <div class="w-100">
           <div class="w-50 float-left">
-            <form class="p-2">
-              <input class="form-control my-1" type="text" value="GF04" placeholder="Room Number" readonly />
-              <input class="form-control my-1" type="datetime-local" placeholder="Date" />
-              <input class="form-control my-1" type="datetime-local" placeholder="Date" />
-            </form> 
+            <div class="p-2">
+              <input class="form-control my-1" type="hidden" value="RID-001" id="roomId"  />
+              <input class="form-control my-1" type="text" value="GF04" id="roomName" placeholder="Room Number" readonly />
+              <input class="form-control my-1" type="datetime-local" placeholder="CheckIn Datetime" id="checkindt" readonly/>
+              <input class="form-control my-1" type="datetime-local" placeholder="Checkout Datetime" id="checkoutdt" readonly/>
+              <div class="col">
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-3 col-form-label">Bill# : </label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="billNum" placeholder="Bill#" readonly>
+                  </div>
+                </div>
+              </div>
+            </div> 
           </div>
           <div class="w-50 float-left">
-            <form class="p-2">
-              <input class="form-control my-1" type="text" value="Mr.Gautham" placeholder="Guest Name" readonly />
+            <div class="p-2">
+              <input class="form-control my-1" type="hidden" value="CID-001" id="custId"  />
+              <input id="custName" class="form-control my-1" type="text" value="Mr.Gautham" placeholder="Guest Name" readonly />
               <div class="row my-2">
                 <div class="col">
                   <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-outline-primary disabled" >
                       <input type="radio" name="options" id="option1" autocomplete="off" /> 
-                      <img style="max-height: 30px;max-width: 150px;" src ="https://insolvencytracker.in/wp-content/uploads/2021/04/OYO.png" />
+                      <img id="reffImg" style="max-height: 30px;max-width: 150px;" src ="https://insolvencytracker.in/wp-content/uploads/2021/04/OYO.png" />
                     </label>
                     
                   </div>                        
                 </div>
               </div>
-              <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Address"></textarea>
-            </form> 
+              <textarea readonly style="resize: none;" class="form-control" id="custAddr" rows="3" placeholder="Address"></textarea>
+            </div> 
           </div>
         </div>
 
-        <div class="row">
+        <div class="row my-2">
           <div class="col">
-            <div class="form-group row">
-              <label for="inputEmail3" class="col-sm-4 col-form-label">Receipt# : </label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" id="inputEmail3" placeholder="Bill#">
-              </div>
-            </div>
+            <select id="paymode" class="custom-select" required>
+              <option value="">Payment Mode</option>
+              <option value="1">Cash</option>
+              <option value="2">Card</option>
+              <option value="3">UPI</option>
+            </select>
           </div>
           <div class="col">
-            <div class="form-group row">
-              <label for="inputEmail3" class="col-sm-4 col-form-label">Checkout : </label>
-              <div class="col-sm-8">
-                <input type="datetime-local" class="form-control" id="inputEmail3" placeholder="Checkout Date">
-              </div>
-            </div>
+            <input id="cardNum" class="form-control" type="text" placeholder="Default input" disabled>
           </div>
         </div>
 
@@ -712,48 +718,37 @@
                   <th>Amount</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr class="table-danger">
-                  <th>14/10/2021</th>
-                  <td>Room Charges</td>
-                  <td>&#8593;&nbsp;&#8377;.900</td>
-                </tr>
-                <tr class="table-success">
-                  <th>14/10/2021</th>
-                  <td>Advance</td>
-                  <td>&#8595;&nbsp;&#8377;.500</td>
-                </tr>
-                <tr class="table-success">
-                  <th>14/10/2021</th>
-                  <td>7Up</td>
-                  <td>&#8595;&nbsp;&#8377;.25</td>
-                </tr>
+              <tbody id="particularDesc">
+                <!-- particular rows-->
               </tbody>
             </table>
-            
+            <div class="alert alert-primary" role="alert">
+              <strong>Sub Total (&#8377;) : </strong><span id="subTotal"></span>&nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;<strong>Total (&#8377;) : </strong><span id="totalBill"></span>
+            </div>
           </div>
           <div class="w-25 float-left">
-            <form class="p-2">
+            <div class="p-2">
               <div class="form-group">
-                <label for="totalBill">Total :</label>
-                <input type="text" class="form-control" id="totalBill" value="&#8377;.925" placeholder="Total Bill">
+                <label for="paidAmount">Paid (&#8377;) :</label>
+                <input type="text" class="form-control" id="paidAmount" value="&#8377;.525" placeholder="Paid Amount" readonly>
               </div>
               <div class="form-group">
-                <label for="paidAmount">Paid :</label>
-                <input type="text" class="form-control" id="paidAmount" value="&#8377;.525" placeholder="Paid Amount">
+                <label for="dueAmount">Due (&#8377;) :</label>
+                <input type="text" class="form-control" id="dueAmount" value="&#8377;.400" placeholder="Due Amount" readonly>
               </div>
               <div class="form-group">
-                <label for="dueAmount">Due :</label>
-                <input type="text" class="form-control" id="dueAmount" value="&#8377;.400" placeholder="Due Amount">
+                <label for="taxAmount">Tax (&#8377;) :</label>
+                <input type="text" class="form-control" id="taxAmount" value="&#8377;.925" placeholder="Total Bill" readonly>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Check Out</button>
       </div>
+      </form>
     </div>
   </div>
 </div>

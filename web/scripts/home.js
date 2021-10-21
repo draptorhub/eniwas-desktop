@@ -10,6 +10,43 @@ $(document).ready(function () {
         checkinAction();
     })
 
+    $("#checkOutForm").submit(function(e){
+        e.preventDefault();
+        checkoutAction();
+    })
+
+    checkoutAction = () =>{
+
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/checkout/create"
+        let cust_rnum = $("#checkOutModal #checkOutForm #roomId").val();
+        let ciid = $("#checkOutModal #checkOutForm #custId").val();
+        let paytype = $("#checkOutModal #checkOutForm #paymode").val();
+        let tamt = $("#checkOutModal #checkOutForm #totalBill").html();
+
+        data = {
+            "ciid":ciid,
+            "paytype":paytype,
+            "tamt":tamt
+        }
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(data){
+                if(data["success"]){
+                    //console.log('bid passed : ',bid);
+                    console.log("checkout added");
+                    updateRoomStat(cust_rnum,1)
+                    $('#checkOutModal').modal('hide');
+                }
+                else
+                    console.log("checkout went wrong!");
+            }
+          });
+
+    }
+
     quitApp = async () => {
         await eel.delete_login()();
     }
@@ -69,7 +106,7 @@ $(document).ready(function () {
                     $('#checkInModal').modal('hide');
                 }
                 else
-                    alert("Branch ID/Manager ID/Password might be incorrect!");
+                    console.log("checkin went wrong!");
             }
           });
     
@@ -150,6 +187,22 @@ $(document).ready(function () {
         });
     }
 
+    timeAdjust = (d) => {
+        let now = new Date(d);
+        now.setMinutes(now.getMinutes() + 660);
+        let t = now.toISOString().slice(0,16);
+        //console.log("t val",t)
+        return t
+    }
+
+    dateString = (d) => {
+        let now = new Date(d);
+        now.setMinutes(now.getMinutes() + 660);
+        let t = now.toISOString().slice(0,10);
+        //console.log("t val",t)
+        return t
+    }
+
     settingTime = () => {
         var now = new Date();
         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -163,6 +216,7 @@ $(document).ready(function () {
 
         $('#checkInModal #ciDatetime').val(t);
         $('#checkInModal #dateTimeco').val(n);
+        $('#checkOutModal #checkoutdt').val(t);
     }
 
     get_parentDivclass = (totrooms) => {
@@ -260,6 +314,111 @@ $(document).ready(function () {
         return s
     }
 
+    dateDiffernce = (d) => {
+        let now = new Date();
+        let checkedIn = new Date(d);
+        let diffTime = Math.abs(now - checkedIn);
+        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        //console.log(diffTime + " milliseconds");
+        //console.log(diffDays + " days");
+        return diffDays;
+    }
+
+    taxAmount = (subTotal) => {
+
+        let taxAmt = 0
+
+        if(subTotal<1000)
+            tax = subTotal * 0;
+
+        if(subTotal>=1000 && subTotal<2500)
+            tax = subTotal * 0.12;
+
+        if(subTotal>=2500 && subTotal<4000)
+            tax = subTotal * 0.18;
+
+        if(subTotal>=4000)
+            tax = subTotal * 0.28;
+
+        return tax;
+
+    }
+
+    renderCheckout = async (rid) => {
+
+        $("#checkOutModal #checkOutForm #roomId").val(rid)
+        let bid = await eel.get_branchId()();
+
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/checkin/coutdata"
+
+        data = {
+            "bid":bid,
+            "rid":rid
+        }
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(data){
+                console.log('cout data : ',data)
+                let d = data["data"][0]
+                $("#checkOutModal #checkOutForm #roomName").val(d["rname"])
+                $("#checkOutModal #checkOutForm #checkindt").val(timeAdjust(d["cidt"]))
+                $("#checkOutModal #checkOutForm #custId").val(d["checkinid"])
+                $("#checkOutModal #checkOutForm #custName").val(d["custName"])
+                $("#checkOutModal #checkOutForm #reffImg").attr("src",d["custref"])
+                $("#checkOutModal #checkOutForm #custAddr").val(d["custAddr"])
+
+                let days = dateDiffernce(timeAdjust(d["cidt"]))
+
+                let paid = 0;
+                let due = 0;
+                let tax = 0;
+                let subTotal = 0;
+                let total = 0;
+                 
+                due = d["roomCharge"]*days;
+
+                subTotal = paid + due;
+                tax = taxAmount(subTotal);
+                total = subTotal + tax;
+
+                let html = ''
+
+                html+=particularsRender(true,d["cidt"],'Room Cost x '+days,d["roomCharge"]*days)
+                $("#checkOutModal #checkOutForm #particularDesc").html(html)
+
+                //`&#8377;.${paid}`
+
+                $("#checkOutModal #checkOutForm #subTotal").html(subTotal);
+                $("#checkOutModal #checkOutForm #totalBill").html(total);
+                $("#checkOutModal #checkOutForm #paidAmount").val(paid);
+                $("#checkOutModal #checkOutForm #dueAmount").val(due);
+                $("#checkOutModal #checkOutForm #taxAmount").val(tax);
+
+            }
+          });
+    }
+
+    particularsRender = (encash,pdate,pdesc,pcost) => {
+        let uprow = `<tr class="table-danger">
+                        <th>${dateString(pdate)}</th>
+                        <td>${pdesc}</td>
+                        <td>&#8377; ${pcost}</td>
+                     </tr>`
+
+        let downrow = `<tr class="table-success">
+                        <th>${dateString(pdate)}</th>
+                        <td>${pdesc}</td>
+                        <td>&#8377; ${pcost}</td>
+                       </tr>`
+        if(encash)
+            return uprow;
+        else
+            return downrow;
+    }
+
     renderRooms = (data) => {
         //console.log('data:',data)
         let rooms = data
@@ -303,6 +462,12 @@ $(document).ready(function () {
         //     alert("The paragraph was clicked.");
         // });
 
+        //dirty to maintenance ==> maintenance
+        $("a.dropdown-item.maintenance").click(function(){
+            let rid = $(this).closest("div").attr("aria-labelledby")
+            updateRoomStat(rid,2)
+        });
+
         //free to management
         $("a.dropdown-item.management").click(function(){
             let rid = $(this).closest("div").attr("aria-labelledby")
@@ -334,6 +499,8 @@ $(document).ready(function () {
         $("a.dropdown-item.checkout").click(function(){
             let rid = $(this).closest("div").attr("aria-labelledby")
             $('#checkOutModal').modal('show');
+            settingTime();
+            renderCheckout(rid)
             //updateRoomStat(rid,0)
         });
 
@@ -341,6 +508,7 @@ $(document).ready(function () {
         $("a.dropdown-item.checkin").click(function(){
             let rid = $(this).closest("div").attr("aria-labelledby")
             $('#checkInModal').modal('show');
+            settingTime();
             let data = roomData.filter(room => room['roomId']==rid)
             //console.log("selected room : ",data);
             $('#cust-rtype').val(data[0]['roomType']).change()
@@ -355,6 +523,12 @@ $(document).ready(function () {
             $(this).parent().removeClass("active");
         })
         $('#checkInForm').trigger("reset");
+        settingTime();
+      })
+
+      $('#checkOutModal').on('hidden.bs.modal', function (e) {
+        //console.log("i am working");
+        $('#checkOutForm').trigger("reset");
         settingTime();
       })
 

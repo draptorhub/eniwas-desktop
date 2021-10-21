@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+{% block title %} eNiwas | History {% endblock %}
+{% block head_scripts %}
+  <script type="text/javascript" src="../scripts/index.js"></script>
+  <link rel="stylesheet" href="../style/index.css">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="./home.html"><strong>&#10229;</strong></a>
+        </li>
+        <li class="nav-item active">
+          <a data-screen="roomRender" class="nav-link" href="#">Room</a>
+        </li>
+        <li class="nav-item">
+          <a data-screen="serviceRender" class="nav-link" href="#">Service</a>
+        </li>
+        <li class="nav-item">
+          <a data-screen="employeeRender" class="nav-link" href="#">Employee</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a data-screen="refRender" class="nav-link" href="#">Referral</a>
+        </li> -->
+      </ul>
+    </div>
+  </nav>
+
+  <div class="p-4 mt-2 d-none justify-content-center" style="display: none;" id="employeeRender">
+    <!-- Table Emplyeee-->
+    <div style="width:100%;display: inline;float: left;">
+
+      <div class="p-3">
+        <table class="table">
+          <thead>
+            <th>Room#</th>
+            <th>Customer Name</th>
+            <th>Details</th>
+            <th>Bill Amount</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="" id="">102</td>
+              <td>Dimple</td>
+              <td>
+                <span>12-10-2021</span>
+                <span>15-10-2021</span>
+                <span>3</span>
+              </td>
+              <td>1000</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Extra Bed</td>
+              <td>Rs.30</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+    </div>
+  </div>
+
+</div>
+{% endblock %}

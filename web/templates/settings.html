@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% block title %} Hotel Management System {% endblock %}
+{% block title %} eNiwas | Settings {% endblock %}
 {% block head_scripts %}
 <script>
   console.log($)
@@ -30,9 +30,9 @@
           <li class="nav-item">
             <a data-screen="employeeRender" class="nav-link" href="#">Employee</a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a data-screen="refRender" class="nav-link" href="#">Referral</a>
-          </li>
+          </li> -->
         </ul>
       </div>
     </nav>
@@ -40,14 +40,14 @@
     <div class="p-4 mt-2 d-flex justify-content-center" id="roomRender">
       
       <!-- Table Rooms-->
-      <div style="width: 50%;display: inline;float: left;">
+      <div style="width:50%;display: inline;float: left;">
         <div class="d-flex justify-content-end">
           <!-- Button trigger modal -->
-          <button id="btnRoomModal" type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#addRoomModal">
+          <button disabled id="btnRoomModal" type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#addRoomModal">
             Add Room
           </button>
           <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#roomTypeModal">
+          <button disabled type="button" class="btn btn-primary" data-toggle="modal" data-target="#roomTypeModal">
             Add Room Type
           </button>
         </div>
@@ -263,9 +263,39 @@
 
     </div>
 
-    <div class="p-4 mt-2" style="display: none;" id="employeeRender">
-      Employee Screen
-      <input type="time" id="birthday" name="birthday">
+    <!-- Employee Screen-->
+
+    <div class="p-4 mt-2 d-none justify-content-center" style="display: none;" id="employeeRender">
+      <!-- Table Emplyeee-->
+      <div style="width:50%;display: inline;float: left;">
+
+        <div>
+          <div class="row p-3">
+            <input id="empName" employee-id="" class="form-control my-2" type="text" placeholder="Employee Name" />
+          </div>
+
+          <div class="d-flex justify-content-center">
+
+            <button type="button" class="btn btn-primary mx-1" data-toggle="tooltip" 
+            data-placement="bottom" title="Add Room">&#10010;</button>
+            <button type="button" class="btn btn-warning mx-1" data-toggle="tooltip" 
+            data-placement="bottom" title="Update Room">&#9998;</button>
+            <button type="button" class="btn btn-danger mx-1" data-toggle="tooltip" 
+            data-placement="bottom" title="Delete Room">&#9866;</button>
+            <button type="button" class="btn btn-success mx-1" data-toggle="tooltip" 
+            data-placement="bottom" title="Clear Fields">&#9851;</button>
+
+          </div>
+        </div>
+
+        <div class="p-3">
+          <ul class="list-group">
+            <li id="EID-0001" class="list-group-item">Ramesh</li>
+            <li id="EID-0002" class="list-group-item">Suresh</li>
+            <li id="EID-0003" class="list-group-item">Ganesh</li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <div class="p-4 mt-2" style="display: none;" id="refRender">
