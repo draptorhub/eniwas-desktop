@@ -21,6 +21,14 @@ $(document).ready(function(){
 
     }
    
+    const getBranchDetails = async () => {
+        let data = await eel.get_login_details()();
+        let obj = JSON.parse(data)
+        console.log('object',obj)
+        if(obj["hname"])
+            window.location.replace('./home.html')
+    }
+
     callStoreQuery = async (bid,bname,hname,mname) => {
 
         await eel.storeBranch(bid,bname,hname,mname)()
@@ -60,8 +68,11 @@ $(document).ready(function(){
             }
           });
 
+
         //window.location.replace('./home.html')
         //location.reload();
     })
+
+    getBranchDetails();
     
 });

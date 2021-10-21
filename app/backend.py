@@ -30,12 +30,14 @@ class Database:
         sql = "select * from `login-details` limit 1;"
         cursor = self.conn.execute(sql)
         t = cursor.fetchone()
-        d = {
-            #'bid':str(t[0]),
-            'bname':str(t[1]),
-            'hname':str(t[2]),
-            'mname':str(t[3])
-        }
+        d = {}
+        if t :
+            d = {
+                #'bid':str(t[0]),
+                'bname':str(t[1]),
+                'hname':str(t[2]),
+                'mname':str(t[3])
+            }
         #print('data : ',d)
         y = json.dumps(d)
         return y
