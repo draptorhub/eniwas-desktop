@@ -2,6 +2,7 @@
 {% block title %} eNiwas | Home {% endblock %}
 {% block head_scripts %}
   <script type="text/javascript" src="../scripts/home.js"></script>
+  <script type="text/javascript" src="../scripts/variables.js"></script>
   <link rel="stylesheet" href="../style/home.css" />
   <style>
     body,html{
@@ -26,21 +27,27 @@
 
           <center><img style="width:128px;height:128px;" src="https://cdn.iconscout.com/icon/free/png-256/hotel-512-453740.png" class="img-fluid" alt="Responsive image"></center>
 
-          <p>Branch Name <br/> Manager Name</p>
+          <p>
+            <span id="hname">Hotel Name</span>
+            <br/>
+            <span id="bname">Branch Name</span>
+            <br/>
+            <span id="mname">Manager Name</span>
+          </p>
           <li>
               <a href="#">EDIT</a>
           </li>
           <li>
-              <a href="#">QUERY</a>
+              <a href="#">History</a>
           </li>
           <li>
-            <a href="#">Accounts</a>
+            <a href="#">Analytics</a>
           </li>
       </ul>
 
       <ul class="list-unstyled CTAs">
           <li>
-              <a href="./index.html" class="download">Logout</a>
+              <a href="./index.html" onclick="quitApp()" class="download">Logout</a>
           </li>
           <!-- <li>
               <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
@@ -82,129 +89,16 @@
         </div>
 
         <div class="progress mt-3 mb-2">
-          <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-            20%
-          </div>
+          <div id="progress-occ" class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0</div>
+          <div id ="progress-ava" class="progress-bar bg-success" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0</div>
+          <div id ="progress-dir" class="progress-bar bg-warning" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0</div>
+          <div id ="progress-man" class="progress-bar bg-primary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0</div>
+          <div id ="progress-mai" class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0</div>
         </div>
 
-        <div class="mt-3 mb-2" id="roomPopulate">
-
-          <div class="d-flex flex-wrap justify-content-center">
-            
-            <div data-toggle="dropdown" id="btnGroupDrop1" aria-haspopup="true" aria-expanded="false" style="width:9%;" class="p-2 flex-fill text-center bg-success m-1">GF04</div>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-              <a class="dropdown-item" data-toggle="modal" data-target="#checkInModal">Check In</a>
-              <a class="dropdown-item" data-toggle="modal" data-target="#checkOutModal">Check Out</a>
-              <a class="dropdown-item" data-toggle="modal" data-target="#changeRoomModalCentered">Change Room</a>
-              <a class="dropdown-item" data-toggle="modal" data-target="#serviceModal">Service</a>
-              <a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCentered">Advance</a>
-            </div>
-            <div data-toggle="dropdown" id="btnGroupDrop2" aria-haspopup="true" aria-expanded="false" style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-            </div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-primary m-1">GF06</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-danger m-1">GF01</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-danger m-1">GF03</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-success m-1">GF04</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-primary m-1">GF06</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-secondary m-1">FF01</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-          </div>
+        <div class="mt-3 mb-2 grid-container r3-c4" id="roomPopulate">
           
-          <div class="d-flex flex-wrap justify-content-center">
-            
-            <div data-toggle="dropdown" id="btnGroupDrop1" aria-haspopup="true" aria-expanded="false" style="width:9%;" class="p-2 flex-fill text-center bg-success m-1">GF04</div>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-            </div>
-            <div data-toggle="dropdown" id="btnGroupDrop2" aria-haspopup="true" aria-expanded="false" style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-            </div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-primary m-1">GF06</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-danger m-1">GF01</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-danger m-1">GF03</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-success m-1">GF04</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-primary m-1">GF06</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-secondary m-1">FF01</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-          </div>
-
-          <div class="d-flex flex-wrap justify-content-center">
-            
-            <div data-toggle="dropdown" id="btnGroupDrop1" aria-haspopup="true" aria-expanded="false" style="width:9%;" class="p-2 flex-fill text-center bg-success m-1">GF04</div>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-            </div>
-            <div data-toggle="dropdown" id="btnGroupDrop2" aria-haspopup="true" aria-expanded="false" style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-            </div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-primary m-1">GF06</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-danger m-1">GF01</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-danger m-1">GF03</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-success m-1">GF04</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-primary m-1">GF06</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-secondary m-1">FF01</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-          </div>
-
-          <div class="d-flex flex-wrap justify-content-center">
-            
-            <div data-toggle="dropdown" id="btnGroupDrop1" aria-haspopup="true" aria-expanded="false" style="width:9%;" class="p-2 flex-fill text-center bg-success m-1">GF04</div>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-            </div>
-            <div data-toggle="dropdown" id="btnGroupDrop2" aria-haspopup="true" aria-expanded="false" style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-            </div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-primary m-1">GF06</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-danger m-1">GF01</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-danger m-1">GF03</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-success m-1">GF04</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-primary m-1">GF06</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-secondary m-1">FF01</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-          </div>
-
-          <div class="d-flex flex-wrap justify-content-center">
-            
-            <div data-toggle="dropdown" id="btnGroupDrop1" aria-haspopup="true" aria-expanded="false" style="width:9%;" class="p-2 flex-fill text-center bg-success m-1">GF04</div>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-            </div>
-            <div data-toggle="dropdown" id="btnGroupDrop2" aria-haspopup="true" aria-expanded="false" style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-              <a class="dropdown-item" href="#!">Dropdown link</a>
-            </div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-primary m-1">GF06</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-danger m-1">GF01</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-danger m-1">GF03</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-success m-1">GF04</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-primary m-1">GF06</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-secondary m-1">FF01</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-            <div style="width:9%;" class="p-2 flex-fill text-center bg-warning m-1">GF05</div>
-          </div>
-
         </div>
-
-        
 
       </div>
       
@@ -362,50 +256,329 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <form id="checkInForm">
       <div style="max-height: 500px;overflow-y: scroll;" class="modal-body">
         <div class="row">
           <div class="col-3">
-            <select class="custom-select">
-              <option selected="">Select Title</option>
-              <option value="1">Mr.</option>
-              <option value="2">Mrs.</option>
-              <option value="3">Ms.</option>
+            <select id="cust-title" class="custom-select" required>
+              <option value="" selected>Select Title</option>
+              <option value="Mr.">Mr.</option>
+              <option value="Mrs.">Mrs.</option>
+              <option value="Ms.">Ms.</option>
             </select>            
           </div>
           <div class="col-6">
-            <input class="form-control" type="text" placeholder="Guest Name">
+            <input id="cust-name" class="form-control" type="text" placeholder="Guest Name" required/>
           </div>
         </div>
 
-        <div class="row my-2">
+        <div class="row px-2 my-2">
+          Select referral :
+          <div style="width:800px;overflow:auto;" class="btn-group btn-group-toggle py-4" data-toggle="buttons">
+ 
+            <label data-toggle="tooltip" data-placement="bottom" title="Direct Walk-In" class="btn btn-outline-primary">
+              <input type="radio" name="referralOption" value="-999" autocomplete="off" required> <img style="max-height: 30px;max-width: 150px;" src ="https://www.shareicon.net/data/256x256/2016/04/24/754642_people_512x512.png" />
+            </label>
+              <label data-toggle="tooltip" data-placement="bottom" title="OYO" class="btn btn-outline-primary">
+                <input type="radio" name="referralOption" value="R-00001" autocomplete="off"> <img style="max-height: 30px;max-width: 150px;" src ="http://18.222.233.51/images/referal-logos/oyo-icon.jpeg" />
+              </label>
+              <label data-toggle="tooltip" data-placement="bottom" title="Cleartrip" class="btn btn-outline-primary">
+                <input type="radio" name="referralOption" value="R-00002" autocomplete="off"> <img style="max-height: 30px;max-width: 150px;" src ="http://18.222.233.51/images/referal-logos/cleartrip-icon.jpeg" />
+              </label>
+              <label data-toggle="tooltip" data-placement="bottom" title="Makemytrip" class="btn btn-outline-primary">
+                <input type="radio" name="referralOption" value="R-00003" autocomplete="off"> <img style="max-height: 30px;max-width: 150px;" src ="http://18.222.233.51/images/referal-logos/makemytrip-icon.jpeg" />
+              </label>
+              <label data-toggle="tooltip" data-placement="bottom" title="Reddoorz" class="btn btn-outline-primary">
+                <input type="radio" name="referralOption" value="R-00004" autocomplete="off"> <img style="max-height: 30px;max-width: 150px;" src ="http://18.222.233.51/images/referal-logos/reddoorz-icon.jpeg" />
+              </label>
+                                   
+              <label data-toggle="tooltip" data-placement="bottom" title="Treebo" class="btn btn-outline-primary">
+                <input type="radio" name="referralOption" value="R-00008" autocomplete="off"> <img style="max-height: 30px;max-width: 150px;" src ="http://18.222.233.51/images/referal-logos/treebo-icon.jpeg" />
+              </label>
+          
+              <label data-toggle="tooltip" data-placement="bottom" title="Trivago" class="btn btn-outline-primary">
+                <input type="radio" name="referralOption" value="R-00005" autocomplete="off"> <img style="max-height: 30px;max-width: 150px;" src ="http://18.222.233.51/images/referal-logos/trivago-icon.jpeg" />
+              </label>
+              <label data-toggle="tooltip" data-placement="bottom" title="Yatra" class="btn btn-outline-primary">
+                <input type="radio" name="referralOption" value="R-00006" autocomplete="off"> <img style="max-height: 30px;max-width: 150px;" src ="http://18.222.233.51/images/referal-logos/yatra-icon.jpeg" />
+              </label>
+              <label data-toggle="tooltip" data-placement="bottom" title="Vista Rooms" class="btn btn-outline-primary">
+                <input type="radio" name="referralOption" value="R-00009" autocomplete="off"> <img style="max-height: 30px;max-width: 150px;" src ="http://18.222.233.51/images/referal-logos/vistarooms-icon.jpeg" />
+              </label>
+              <label data-toggle="tooltip" data-placement="bottom" title="FabHotels" class="btn btn-outline-primary">
+                <input type="radio" name="referralOption" value="R-00007" autocomplete="off"> <img style="max-height: 30px;max-width: 150px;" src ="http://18.222.233.51/images/referal-logos/fabhotels-icon.jpeg" />
+              </label>
+              
+            
+          </div>
+        </div>
+
+        <div class="row my-1">
+          <div class="col"><input id="cust-mobile" class="form-control" type="text" placeholder="Mobile Number" required /></div>
+          <div class="col"><input id="cust-email" class="form-control" type="text" placeholder="Email" required/></div>
+        </div>
+
+        <div class="row my-1">
           <div class="col">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-outline-primary active">
-                <input type="radio" name="options" id="option1" autocomplete="off" checked=""> <img style="max-height: 30px;max-width: 150px;" src ="https://insolvencytracker.in/wp-content/uploads/2021/04/OYO.png" />
-              </label>
-              <label class="btn btn-outline-primary">
-                <input type="radio" name="options" id="option2" autocomplete="off"> <img style="max-height: 30px;max-width: 150px;" src ="https://scrapingexpert.com/wp-content/uploads/2017/06/tripadvisor.png" />
-              </label>
-              <label class="btn btn-outline-primary">
-                <input type="radio" name="options" id="option2" autocomplete="off"> <img style="max-height: 30px;max-width: 150px;" src ="https://www.shareicon.net/data/256x256/2016/04/24/754642_people_512x512.png" />
-              </label>
-            </div>                        
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-4"><input class="form-control" type="text" placeholder="Mobile Number"></div>
-          <div class="col-4">
-            <select class="custom-select">
-              <option selected="">Select Nationality</option>
-              <option value="1">India</option>
-              <option value="2">Australia</option>
-              <option value="3">United States</option>
+            <select id="cust-natn" class="custom-select" required>
+              <option value="">Select Nationality</option>
+              <option value="AF">Afghanistan</option>
+              <option value="AX">Aland Islands</option>
+              <option value="AL">Albania</option>
+              <option value="DZ">Algeria</option>
+              <option value="AS">American Samoa</option>
+              <option value="AD">Andorra</option>
+              <option value="AO">Angola</option>
+              <option value="AI">Anguilla</option>
+              <option value="AQ">Antarctica</option>
+              <option value="AG">Antigua and Barbuda</option>
+              <option value="AR">Argentina</option>
+              <option value="AM">Armenia</option>
+              <option value="AW">Aruba</option>
+              <option value="AU">Australia</option>
+              <option value="AT">Austria</option>
+              <option value="AZ">Azerbaijan</option>
+              <option value="BS">Bahamas</option>
+              <option value="BH">Bahrain</option>
+              <option value="BD">Bangladesh</option>
+              <option value="BB">Barbados</option>
+              <option value="BY">Belarus</option>
+              <option value="BE">Belgium</option>
+              <option value="BZ">Belize</option>
+              <option value="BJ">Benin</option>
+              <option value="BM">Bermuda</option>
+              <option value="BT">Bhutan</option>
+              <option value="BO">Bolivia</option>
+              <option value="BQ">Bonaire, Sint Eustatius and Saba</option>
+              <option value="BA">Bosnia and Herzegovina</option>
+              <option value="BW">Botswana</option>
+              <option value="BV">Bouvet Island</option>
+              <option value="BR">Brazil</option>
+              <option value="IO">British Indian Ocean Territory</option>
+              <option value="BN">Brunei Darussalam</option>
+              <option value="BG">Bulgaria</option>
+              <option value="BF">Burkina Faso</option>
+              <option value="BI">Burundi</option>
+              <option value="KH">Cambodia</option>
+              <option value="CM">Cameroon</option>
+              <option value="CA">Canada</option>
+              <option value="CV">Cape Verde</option>
+              <option value="KY">Cayman Islands</option>
+              <option value="CF">Central African Republic</option>
+              <option value="TD">Chad</option>
+              <option value="CL">Chile</option>
+              <option value="CN">China</option>
+              <option value="CX">Christmas Island</option>
+              <option value="CC">Cocos (Keeling) Islands</option>
+              <option value="CO">Colombia</option>
+              <option value="KM">Comoros</option>
+              <option value="CG">Congo</option>
+              <option value="CD">Congo, Democratic Republic of the Congo</option>
+              <option value="CK">Cook Islands</option>
+              <option value="CR">Costa Rica</option>
+              <option value="CI">Cote D'Ivoire</option>
+              <option value="HR">Croatia</option>
+              <option value="CU">Cuba</option>
+              <option value="CW">Curacao</option>
+              <option value="CY">Cyprus</option>
+              <option value="CZ">Czech Republic</option>
+              <option value="DK">Denmark</option>
+              <option value="DJ">Djibouti</option>
+              <option value="DM">Dominica</option>
+              <option value="DO">Dominican Republic</option>
+              <option value="EC">Ecuador</option>
+              <option value="EG">Egypt</option>
+              <option value="SV">El Salvador</option>
+              <option value="GQ">Equatorial Guinea</option>
+              <option value="ER">Eritrea</option>
+              <option value="EE">Estonia</option>
+              <option value="ET">Ethiopia</option>
+              <option value="FK">Falkland Islands (Malvinas)</option>
+              <option value="FO">Faroe Islands</option>
+              <option value="FJ">Fiji</option>
+              <option value="FI">Finland</option>
+              <option value="FR">France</option>
+              <option value="GF">French Guiana</option>
+              <option value="PF">French Polynesia</option>
+              <option value="TF">French Southern Territories</option>
+              <option value="GA">Gabon</option>
+              <option value="GM">Gambia</option>
+              <option value="GE">Georgia</option>
+              <option value="DE">Germany</option>
+              <option value="GH">Ghana</option>
+              <option value="GI">Gibraltar</option>
+              <option value="GR">Greece</option>
+              <option value="GL">Greenland</option>
+              <option value="GD">Grenada</option>
+              <option value="GP">Guadeloupe</option>
+              <option value="GU">Guam</option>
+              <option value="GT">Guatemala</option>
+              <option value="GG">Guernsey</option>
+              <option value="GN">Guinea</option>
+              <option value="GW">Guinea-Bissau</option>
+              <option value="GY">Guyana</option>
+              <option value="HT">Haiti</option>
+              <option value="HM">Heard Island and Mcdonald Islands</option>
+              <option value="VA">Holy See (Vatican City State)</option>
+              <option value="HN">Honduras</option>
+              <option value="HK">Hong Kong</option>
+              <option value="HU">Hungary</option>
+              <option value="IS">Iceland</option>
+              <option value="IN">India</option>
+              <option value="ID">Indonesia</option>
+              <option value="IR">Iran, Islamic Republic of</option>
+              <option value="IQ">Iraq</option>
+              <option value="IE">Ireland</option>
+              <option value="IM">Isle of Man</option>
+              <option value="IL">Israel</option>
+              <option value="IT">Italy</option>
+              <option value="JM">Jamaica</option>
+              <option value="JP">Japan</option>
+              <option value="JE">Jersey</option>
+              <option value="JO">Jordan</option>
+              <option value="KZ">Kazakhstan</option>
+              <option value="KE">Kenya</option>
+              <option value="KI">Kiribati</option>
+              <option value="KP">Korea, Democratic People's Republic of</option>
+              <option value="KR">Korea, Republic of</option>
+              <option value="XK">Kosovo</option>
+              <option value="KW">Kuwait</option>
+              <option value="KG">Kyrgyzstan</option>
+              <option value="LA">Lao People's Democratic Republic</option>
+              <option value="LV">Latvia</option>
+              <option value="LB">Lebanon</option>
+              <option value="LS">Lesotho</option>
+              <option value="LR">Liberia</option>
+              <option value="LY">Libyan Arab Jamahiriya</option>
+              <option value="LI">Liechtenstein</option>
+              <option value="LT">Lithuania</option>
+              <option value="LU">Luxembourg</option>
+              <option value="MO">Macao</option>
+              <option value="MK">Macedonia, the Former Yugoslav Republic of</option>
+              <option value="MG">Madagascar</option>
+              <option value="MW">Malawi</option>
+              <option value="MY">Malaysia</option>
+              <option value="MV">Maldives</option>
+              <option value="ML">Mali</option>
+              <option value="MT">Malta</option>
+              <option value="MH">Marshall Islands</option>
+              <option value="MQ">Martinique</option>
+              <option value="MR">Mauritania</option>
+              <option value="MU">Mauritius</option>
+              <option value="YT">Mayotte</option>
+              <option value="MX">Mexico</option>
+              <option value="FM">Micronesia, Federated States of</option>
+              <option value="MD">Moldova, Republic of</option>
+              <option value="MC">Monaco</option>
+              <option value="MN">Mongolia</option>
+              <option value="ME">Montenegro</option>
+              <option value="MS">Montserrat</option>
+              <option value="MA">Morocco</option>
+              <option value="MZ">Mozambique</option>
+              <option value="MM">Myanmar</option>
+              <option value="NA">Namibia</option>
+              <option value="NR">Nauru</option>
+              <option value="NP">Nepal</option>
+              <option value="NL">Netherlands</option>
+              <option value="AN">Netherlands Antilles</option>
+              <option value="NC">New Caledonia</option>
+              <option value="NZ">New Zealand</option>
+              <option value="NI">Nicaragua</option>
+              <option value="NE">Niger</option>
+              <option value="NG">Nigeria</option>
+              <option value="NU">Niue</option>
+              <option value="NF">Norfolk Island</option>
+              <option value="MP">Northern Mariana Islands</option>
+              <option value="NO">Norway</option>
+              <option value="OM">Oman</option>
+              <option value="PK">Pakistan</option>
+              <option value="PW">Palau</option>
+              <option value="PS">Palestinian Territory, Occupied</option>
+              <option value="PA">Panama</option>
+              <option value="PG">Papua New Guinea</option>
+              <option value="PY">Paraguay</option>
+              <option value="PE">Peru</option>
+              <option value="PH">Philippines</option>
+              <option value="PN">Pitcairn</option>
+              <option value="PL">Poland</option>
+              <option value="PT">Portugal</option>
+              <option value="PR">Puerto Rico</option>
+              <option value="QA">Qatar</option>
+              <option value="RE">Reunion</option>
+              <option value="RO">Romania</option>
+              <option value="RU">Russian Federation</option>
+              <option value="RW">Rwanda</option>
+              <option value="BL">Saint Barthelemy</option>
+              <option value="SH">Saint Helena</option>
+              <option value="KN">Saint Kitts and Nevis</option>
+              <option value="LC">Saint Lucia</option>
+              <option value="MF">Saint Martin</option>
+              <option value="PM">Saint Pierre and Miquelon</option>
+              <option value="VC">Saint Vincent and the Grenadines</option>
+              <option value="WS">Samoa</option>
+              <option value="SM">San Marino</option>
+              <option value="ST">Sao Tome and Principe</option>
+              <option value="SA">Saudi Arabia</option>
+              <option value="SN">Senegal</option>
+              <option value="RS">Serbia</option>
+              <option value="CS">Serbia and Montenegro</option>
+              <option value="SC">Seychelles</option>
+              <option value="SL">Sierra Leone</option>
+              <option value="SG">Singapore</option>
+              <option value="SX">Sint Maarten</option>
+              <option value="SK">Slovakia</option>
+              <option value="SI">Slovenia</option>
+              <option value="SB">Solomon Islands</option>
+              <option value="SO">Somalia</option>
+              <option value="ZA">South Africa</option>
+              <option value="GS">South Georgia and the South Sandwich Islands</option>
+              <option value="SS">South Sudan</option>
+              <option value="ES">Spain</option>
+              <option value="LK">Sri Lanka</option>
+              <option value="SD">Sudan</option>
+              <option value="SR">Suriname</option>
+              <option value="SJ">Svalbard and Jan Mayen</option>
+              <option value="SZ">Swaziland</option>
+              <option value="SE">Sweden</option>
+              <option value="CH">Switzerland</option>
+              <option value="SY">Syrian Arab Republic</option>
+              <option value="TW">Taiwan, Province of China</option>
+              <option value="TJ">Tajikistan</option>
+              <option value="TZ">Tanzania, United Republic of</option>
+              <option value="TH">Thailand</option>
+              <option value="TL">Timor-Leste</option>
+              <option value="TG">Togo</option>
+              <option value="TK">Tokelau</option>
+              <option value="TO">Tonga</option>
+              <option value="TT">Trinidad and Tobago</option>
+              <option value="TN">Tunisia</option>
+              <option value="TR">Turkey</option>
+              <option value="TM">Turkmenistan</option>
+              <option value="TC">Turks and Caicos Islands</option>
+              <option value="TV">Tuvalu</option>
+              <option value="UG">Uganda</option>
+              <option value="UA">Ukraine</option>
+              <option value="AE">United Arab Emirates</option>
+              <option value="GB">United Kingdom</option>
+              <option value="US">United States</option>
+              <option value="UM">United States Minor Outlying Islands</option>
+              <option value="UY">Uruguay</option>
+              <option value="UZ">Uzbekistan</option>
+              <option value="VU">Vanuatu</option>
+              <option value="VE">Venezuela</option>
+              <option value="VN">Viet Nam</option>
+              <option value="VG">Virgin Islands, British</option>
+              <option value="VI">Virgin Islands, U.s.</option>
+              <option value="WF">Wallis and Futuna</option>
+              <option value="EH">Western Sahara</option>
+              <option value="YE">Yemen</option>
+              <option value="ZM">Zambia</option>
+              <option value="ZW">Zimbabwe</option>
             </select>            
           </div>
-          <div class="col-4">
-            <select class="custom-select">
-              <option selected="">Select Purpose</option>
+          <div class="col">
+            <select id="cust-purp" class="custom-select" required>
+              <option value="" selected>Select Purpose</option>
               <option value="1">Travel</option>
               <option value="2">Business</option>
               <option value="3">Other</option>
@@ -415,81 +588,59 @@
 
         <div class="row my-2">
           <div class="col">
-            <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Address"></textarea>
+            <textarea id="cust-addr" style="resize: none;" class="form-control" rows="3" placeholder="Address" required></textarea>
           </div>
         </div>
 
         <div class="row my-2">
-          <div class="col-4"><input class="form-control" type="date" placeholder="Select Date"></div>
-          <div class="col-4"><input class="form-control" type="date" placeholder="Select Date"></div>
-          <div class="col-2"><input class="form-control" type="number" placeholder="Days"></div>
-          <div class="col-2"><input class="form-control" type="number" placeholder="Guests"></div>
+          <div class="col-4"><input class="form-control" id="ciDatetime" type="datetime-local" readonly></div>
+          <div class="col-4"><input class="form-control" id="dateTimeco" type="datetime-local" readonly></div>
+          <div class="col-2"><input class="form-control" id="cust-days" type="number" placeholder="Days" required></div>
+          <div class="col-2"><input class="form-control" id="cust-guest" type="number" placeholder="Guests" required></div>
         </div>
 
         <div class="row my-2">
-          <div class="col-3"><input class="form-control" type="number" placeholder="Advance"></div>
+          <div class="col-3"><input id="cust-adv" class="form-control" type="number" placeholder="Advance"></div>
           <div class="col-3">
-            <select class="custom-select">
-              <option selected="">Select Payment</option>
+            <select id="cust-pay" class="custom-select" required>
+              <option value="" selected>Select Payment</option>
               <option value="1">Cash</option>
               <option value="2">Card</option>
               <option value="3">UPI</option>
             </select>
           </div>
-          <div class="col-6"><input class="form-control" type="text" placeholder="Card Number" disabled /></div>
+          <div class="col-6"><input id="cust-card" class="form-control" type="text" placeholder="Card Number" disabled /></div>
         </div>
 
         <div class="row">
           <div class="col-3">
-            <select class="custom-select">
-              <option selected="">Room Type</option>
-              <option value="1">Classic 2X</option>
-              <option value="2">Suite</option>
+            <select id="cust-rtype" class="custom-select" required>
+              <option value="" selected>Room Type</option>
+            </select>
+          </div>          
+          <div class="col-3">
+            <select id="cust-rnum" class="custom-select" required>
+              <option value="" selected>Select Room#</option>
             </select>
           </div>
           <div class="col-3">
-            <select class="custom-select">
-              <option selected="">Bed Type</option>
-              <option value="1">Single</option>
-              <option value="2">Double</option>
-            </select>
-          </div>
-          <div class="col-3">
-            <select class="custom-select">
-              <option selected="">AC Type</option>
-              <option value="1">AC</option>
-              <option value="2">Non-AC</option>
-            </select>
-          </div>
-          <div class="col-3">
-            <select class="custom-select">
-              <option selected="">Rate Plan</option>
+            <select id="cust-rplan" class="custom-select" required>
+              <option value="" selected>Rate Plan</option>
               <option value="1">Continental</option>
               <option value="2">American</option>
               <option value="3">European</option>
             </select>
           </div>
-        </div>
-
-        <div class="row my-2">
-          <div class="col-4">
-            <select class="custom-select">
-              <option selected="">Room#</option>
-              <option value="1">GF01</option>
-              <option value="2">FF01</option>
-              <option value="3">SF02</option>
-            </select>
-          </div>
-          <div class="col-4">
-            <input class="form-control" type="number" placeholder="Cost">
+          <div class="col-3">
+            <input id="cust-rcost" class="form-control" type="number" placeholder="Cost" required/>
           </div>
         </div>
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+        <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Check In</button>
+      </div></form>
     </div>
   </div>
 </div>
@@ -519,8 +670,9 @@
               <div class="row my-2">
                 <div class="col">
                   <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-outline-primary disabled
-                      <input type="radio" name="options" id="option1" autocomplete="off" checked=""> <img style="max-height: 30px;max-width: 150px;" src ="https://insolvencytracker.in/wp-content/uploads/2021/04/OYO.png" />
+                    <label class="btn btn-outline-primary disabled" >
+                      <input type="radio" name="options" id="option1" autocomplete="off" /> 
+                      <img style="max-height: 30px;max-width: 150px;" src ="https://insolvencytracker.in/wp-content/uploads/2021/04/OYO.png" />
                     </label>
                     
                   </div>                        
@@ -608,12 +760,6 @@
 
 <div class="overlay"></div>
 
-<!-- jQuery CDN - Slim version (=without AJAX) -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<!-- Popper.JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 <!-- jQuery Custom Scroller CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
@@ -634,6 +780,11 @@
           $('.collapse.in').toggleClass('in');
           $('a[aria-expanded=true]').attr('aria-expanded', 'false');
       });
+  });
+</script>
+<script>
+  $(function(){
+    $('[data-toggle="tooltip"]').tooltip();
   });
 </script>
 {% endblock %}

@@ -1,101 +1,33 @@
-const sendLoadDialog = async function() {
-    let value = await eel.getWordFile()()
-    return value
-}
-
-const sendSaveDialog = async function() {
-    let value = await eel.getSaveFile()()
-    return value
-}
-
-const renderFields = function(fieldsArray){
-
-    if(fieldsArray.length<1){
-        alert("Select a file with mergefields")
-        return
-    }
-
-    $("#formFields").html("")
-
-    $.each(fieldsArray, function( index, value ) {
-        let inputField = `<input class="form-control my-1" type="text" placeholder="${value}" required/>` 
-        $("#formFields").append(inputField);
-    });
-
-}
-
-const sendWordProcess = async function(fileName) {
-    let value = await eel.processWordFile(fileName)()
-    renderFields(value)
-}
-
-const sendGenerateFile = async function(fileName,data,outputFile) {
-    await eel.generateWordFile(fileName,data,outputFile)()
-    alert("File Created Successfully!")
-}
-
 $(document).ready(function(){
 
-    // $(window).resize(function(){
-    //     window.resizeTo(400, 400)
-    // })
-    console.log("win : ",window.location)
-    //window.open("https://www.google.com/","_parent","width=400,height=400,resizable=no,titlebar=no")
-    //window.resizeBy(400,400)
+    storeBid = (bid) => {
 
-    $("#formWordFile").click(function(){
-        let rvalue = sendLoadDialog()
-        rvalue.then((a) => {
-            if(a!=""){
-                $("#inputWordFile").val(a)
-                sendWordProcess($("#inputWordFile").val())
-            }else{
-                alert("Select a doc file!")
-                $("#formFields").html("")
-                $("#inputWordFile").val("")
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/login/branchdetails/"+bid
+        let bname = ""
+        let hname = ""
+        let mname = ""
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(data){
+                //console.log('branch data : ',data["data"][0]["bname"])
+                bname = data["data"][0]["bname"]
+                hname = data["data"][0]["hname"]
+                mname = data["data"][0]["mname"]
+                callStoreQuery(bid,bname,hname,mname)
             }
-        });
-    })
+          });
 
-    $("#saveWordFile").click(function(){
-        let rvalue = sendSaveDialog()
-        rvalue.then((a) => {
-            if(a!="")
-                $("#saveFileName").val(a)
-            else{
-                alert("Select a doc file!")
-                $("#formFields").html("")
-                $("#saveFileName").val("")
-            }
-        });
-    })
-
-    $("#processWordFile").click(function(){
-        if($("#inputWordFile").val()!="")
-            sendWordProcess($("#inputWordFile").val())
-        else{
-            alert("Select a doc file!")
-        }
-    })
-
-    $("#generateFileForm").submit(function(){
-
-        if($( "div#formFields > input.form-control.my-1" ).length < 1){
-            alert("Process a word file!")
-            return
-        }
-
-        let data = {}
-
-        $( "div#formFields > input.form-control.my-1" ).each(function() {
-            data[$(this).attr("placeholder")]=$(this).val()
-        });
-
-        sendGenerateFile($("#inputWordFile").val(),data,$("#saveFileName").val())
-
-    })
-
+    }
    
+    callStoreQuery = async (bid,bname,hname,mname) => {
+
+        await eel.storeBranch(bid,bname,hname,mname)()
+        //console.log("bid stored!");
+        window.location.replace('./home.html')
+    }
+
     $("#loginButton").click(function(){
 
         let mid = $("input[name=managerId]").val();
@@ -119,8 +51,10 @@ $(document).ready(function(){
             url: url,
             data: data,
             success: function(data){
-                if(data["success"])
-                    window.location.replace('./home.html')
+                if(data["success"]){
+                    console.log('bid passed : ',bid);
+                    storeBid(bid)
+                }
                 else
                     alert("Branch ID/Manager ID/Password might be incorrect!");
             }

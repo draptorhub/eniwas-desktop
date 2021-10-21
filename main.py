@@ -3,22 +3,34 @@ import time
 import os,sys
 import json, ast
 from app.backend import Database
-from app.document_generator import Generate_Agreement
-
-d=""
-g=""
 
 def main():
-    global g,d
+    global d
+    d = Database("./app/eniwas_test.db")
     eel.init('web')
-    d = Database("test_db.db")
-    g = Generate_Agreement()
-    eel.start('templates/index.html', jinja_templates='templates')    # Start
+    eel.start('templates/index.html',jinja_templates='templates',port=0)    # Start
 
 @eel.expose
 def getTime(data):
     print("i recieved it",data)
     return "success"
+
+@eel.expose
+def storeBranch(bid,bname,hname,mname):
+    data = (bid,bname,hname,mname)
+    d.register_login_details(data)
+
+@eel.expose
+def get_login_details():
+    return d.get_login_details()
+
+@eel.expose
+def delete_login():
+    return d.del_login()
+
+@eel.expose
+def get_branchId():
+    return d.get_branchId()
 
 if __name__=="__main__":
     main()

@@ -189,3 +189,39 @@ a.article:hover {
     top: 0;
     right: 0;
 }
+
+.grid-container {
+    display: grid;
+    grid-gap: 10px;
+    padding: 5px;
+  }
+
+.r5-c10{
+    grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto;
+}
+
+.r3-c3{
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
+}
+
+.r3-c4{
+    grid-template-columns: auto auto auto auto;
+    grid-template-rows: auto auto auto;
+}
+
+.r3-c5{
+    grid-template-columns: auto auto auto auto auto;
+    grid-template-rows: auto auto auto;
+}
+
+.r3-c7{
+    grid-template-columns: auto auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto;
+}
+
+.r5-c5{
+    grid-template-columns: auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto;
+}
