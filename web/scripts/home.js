@@ -208,7 +208,7 @@ $(document).ready(function () {
         let cust_pay = $('#cust-pay').val()
         let cust_card = $('#cust-card').val()
         let cust_rtype = $('#cust-rtype').val()
-        let cust_rnum = $('#cust-rnum').val()
+        let cust_rnum = $('checkInModal checkInForm #cust-rnum').val()
         let cust_rplan = $('#cust-rplan').val()
         let cust_rcost = $('#cust-rcost').val()
         
@@ -224,7 +224,7 @@ $(document).ready(function () {
             'caddr':cust_addr,
             'cdays':cust_days,
             'cque':cust_guest,
-            'cpay':cust_pay,
+            'cpay':1,
             'rplan':cust_rplan,
             'rnum':cust_rnum,
             'bid':bid,
