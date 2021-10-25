@@ -208,7 +208,7 @@ $(document).ready(function () {
         let cust_pay = $('#cust-pay').val()
         let cust_card = $('#cust-card').val()
         let cust_rtype = $('#cust-rtype').val()
-        let cust_rnum = $('checkInModal checkInForm #cust-rnum').val()
+        let cust_rnum = $('#checkInModal #checkInForm #cust-rnum').val()
         let cust_rplan = $('#cust-rplan').val()
         let cust_rcost = $('#cust-rcost').val()
         
