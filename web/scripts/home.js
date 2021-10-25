@@ -15,6 +15,142 @@ $(document).ready(function () {
         checkoutAction();
     })
 
+    $("#advanceForm").submit(function(e){
+        e.preventDefault();
+        advanceAction();
+    })
+
+    $("#changeRoomForm").submit(function(e){
+        e.preventDefault();
+        changeRoomAction();
+    })
+
+    changeRoomAction = async () => {
+        //e.preventDefault();
+        console.log("change room started");
+
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/checkin/changeroom"
+
+        let bid = await eel.get_branchId()();
+
+        let ciid = $("#changeRoomModalCentered #custId").attr('cust-id');
+        let rid = $("#changeRoomModalCentered #roomId").attr('room-id');
+        let new_room = $("#changeRoomModalCentered #changeRoomForm #cust-rnum").val();
+
+        let data = {
+            "ciid":ciid,
+            "bid":bid,
+            "rid":new_room
+        }
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(data){
+                console.log("Room was updated")
+                updateRoomStat(rid,1)
+                updateRoomStat(new_room,4)
+                $('#changeRoomModalCentered').modal('hide');
+                //getAllRoomDetails();
+            }
+        })
+
+    }
+
+    validateCardNumber = (number) => {
+        var regex = new RegExp("^(?=[0-9]*$)(?:.{4}|.{6})$");
+        if (regex.test(number))
+            return true;
+        else
+            return false;
+    
+        //return luhnCheck(number);
+    }
+    
+    luhnCheck = (val) => {
+        var sum = 0;
+        for (var i = 0; i < val.length; i++) {
+            var intVal = parseInt(val.substr(i, 1));
+            if (i % 2 == 0) {
+                intVal *= 2;
+                if (intVal > 9) {
+                    intVal = 1 + (intVal % 10);
+                }
+            }
+            sum += intVal;
+        }
+        return (sum % 10) == 0;
+    }
+
+    addCardDetails = (ciid,cnum) => {
+
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/card-details/createauto"
+
+        let data = {
+            "ciid":ciid,
+            "cnum":cnum
+        }
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(data){
+                console.log("card was added!")
+                $('#advanceModal').modal('hide');
+            }
+        })
+
+    }
+
+    advanceAction = () => {
+        //console.log("advance operation");
+        let advAmount = $("#advanceModal #advanceForm #advAmount").val()
+        let payMode = $("#advanceModal #advanceForm #payMode").val()
+        let cid = $("#advanceModal #advanceForm #custId").attr("cust-id");
+
+        let data = {
+            "bdesc":'Room Advance',
+            "btype":-1,
+            "bamt":advAmount,
+            "cid":cid,
+            "ptype":payMode
+        }
+
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/bills/create"
+
+        let vflag = false;
+        let cardNumber = '';
+
+        if(payMode==2){
+            cardNumber = $("#advanceModal #advanceForm #cardNumber").val()
+            if(validateCardNumber(cardNumber))
+                vflag = true;
+        }
+
+        if(payMode==2 && !vflag){
+            alert("Enter valid card number!")
+            return;
+        }else{
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function(data){
+                    if(payMode==2)
+                        addCardDetails(cid,cardNumber);
+                    else{
+                        console.log("card was not selected")
+                        $('#advanceModal').modal('hide');
+                    }
+                }
+            })
+        }
+
+        //console.log(advAmount,payMode);
+    }
+
     checkoutAction = () =>{
 
         let url = "http://"+enviVar.host+":"+enviVar.port+"/api/checkout/create"
@@ -39,6 +175,7 @@ $(document).ready(function () {
                     console.log("checkout added");
                     updateRoomStat(cust_rnum,1)
                     $('#checkOutModal').modal('hide');
+                    //getAllRoomDetails();
                 }
                 else
                     console.log("checkout went wrong!");
@@ -104,6 +241,7 @@ $(document).ready(function () {
                     console.log("checkin added");
                     updateRoomStat(cust_rnum,4)
                     $('#checkInModal').modal('hide');
+                    //getAllRoomDetails();
                 }
                 else
                     console.log("checkin went wrong!");
@@ -116,13 +254,14 @@ $(document).ready(function () {
 
     renderRoomTypes = (data) => {
         let html = '';
-        html += '<option value="" selected>Room Type</option>'
+        html += '<option value="">Room Type</option>'
 
         data.forEach(element => {
             html+=`<option value="${element['roomTypeId']}">${element['roomTypeName']}</option>`
         });
 
-        $("#cust-rtype").html(html)
+        $("#checkInModal #checkInForm #cust-rtype").html(html)
+        $("#changeRoomModalCentered #cust-rtype").html(html)
 
     }
 
@@ -141,47 +280,67 @@ $(document).ready(function () {
     var roomData = []
 
     copyData = (data) => {
+        roomData = [];
         roomData = [...data];
+        console.log('api data after passing : ',data);
+        console.log('room Data : ',roomData);
     }
 
     setRoomAction = () => {
-        $('#cust-rnum').change(function(){
+        $('#checkInModal #checkInForm #cust-rnum').change(function(){
             let cost = $(this).find(':selected').attr('room-cost')
-            $('#cust-rcost').val(cost)
+            $('#checkInModal #checkInForm #cust-rcost').val(cost)
         })
     }
 
     rtypework = (currentValue) => {
         if(currentValue==""){
-            $('#cust-rcost').val("")
-            $("#cust-rnum").prop('disabled',true)
+            $('#checkInModal #checkInForm #cust-rcost').val("")
+            $("#checkInModal #checkInForm #cust-rnum").prop('disabled',true)
             return;
         }
-        $('#cust-rcost').val("")
-        $("#cust-rnum").prop('disabled',false)
+        $('#checkInModal #checkInForm #cust-rcost').val("")
+        $("#checkInModal #checkInForm #cust-rnum").prop('disabled',false)
         //console.log("this val: ",$(this).val());
         let fd = roomData.filter(room => room['roomType'] == currentValue)
         .map(room => `<option room-cost="${room['roomTypeCost']}" value="${room['roomId']}">${room['roomName']}</option>`).join('');
-        let html = `<option room-cost="" value="" selected>Select Room#</option>`
+        let html = `<option room-cost="0" value="" selected>Select Room#</option>`
         html+=fd
-        $("#cust-rnum").html(html)
+        $("#checkInModal #checkInForm #cust-rnum").html(html)
         setRoomAction();
     }
 
-    $('#cust-rtype').change(function() {
+    changeRoomrtype = (currentValue) => {
+        if(currentValue==""){
+            $("#changeRoomModalCentered #cust-rnum").prop('disabled',true)
+            return;
+        }
+        $("#changeRoomModalCentered #cust-rnum").prop('disabled',false)
+        //console.log("this val: ",$(this).val());
+        let fd = roomData.filter(room => room['roomType'] == currentValue)
+        .map(room => `<option room-cost="${room['roomTypeCost']}" value="${room['roomId']}">${room['roomName']}</option>`).join('');
+        let html = `<option room-cost="0" value="" selected>Select Room#</option>`
+        html+=fd
+        $("#changeRoomModalCentered #cust-rnum").html(html)
+    }
+
+    $('#checkInModal #checkInForm #cust-rtype').change(function() {
         let currentValue = $(this).val()
         rtypework(currentValue)
     });
 
+    $('#changeRoomModalCentered #cust-rtype').change(function() {
+        let currentValue = $(this).val()
+        changeRoomrtype(currentValue)
+    });
+
     getAllRoomDetails = async () => {
         let bid = await eel.get_branchId()();
-        let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/room/frontlist/"+bid
+        let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/room/selectoption/"+bid
         $.ajax({
             type: "GET",
             url: url,
             success: function(data){
-                //renderRoomTypes(data["data"])
-                console.log('data in function : ',data["data"])
                 copyData(data["data"])
             }
         });
@@ -194,6 +353,8 @@ $(document).ready(function () {
         //console.log("t val",t)
         return t
     }
+
+
 
     dateString = (d) => {
         let now = new Date(d);
@@ -217,15 +378,17 @@ $(document).ready(function () {
         $('#checkInModal #ciDatetime').val(t);
         $('#checkInModal #dateTimeco').val(n);
         $('#checkOutModal #checkoutdt').val(t);
+        $('#changeRoomModalCentered #changeRoomdt').val(t);
+        //changeRoomdt
     }
 
     get_parentDivclass = (totrooms) => {
 
         if(totrooms<20)
             return('r3-c4')
-        else if(20<=totrooms<30)
+        else if(totrooms>=20 && totrooms<30)
             return('r5-c5')
-        else if(30<=totrooms<40)
+        else if(totrooms>=30 && totrooms<40)
             return('r3-c7')
         else if(totrooms>=40)
             return('r5-c10')
@@ -319,8 +482,6 @@ $(document).ready(function () {
         let checkedIn = new Date(d);
         let diffTime = Math.abs(now - checkedIn);
         let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-        //console.log(diffTime + " milliseconds");
-        //console.log(diffDays + " days");
         return diffDays;
     }
 
@@ -340,7 +501,7 @@ $(document).ready(function () {
         if(subTotal>=4000)
             tax = subTotal * 0.28;
 
-        return tax;
+        return Number(tax.toFixed(2));
 
     }
 
@@ -361,7 +522,7 @@ $(document).ready(function () {
             url: url,
             data: data,
             success: function(data){
-                console.log('cout data : ',data)
+                //console.log('cout data : ',data)
                 let d = data["data"][0]
                 $("#checkOutModal #checkOutForm #roomName").val(d["rname"])
                 $("#checkOutModal #checkOutForm #checkindt").val(timeAdjust(d["cidt"]))
@@ -439,6 +600,28 @@ $(document).ready(function () {
         setAction_forlinks()
     }
 
+    apiRoomStat = async (bid,rid,stat) => {
+        
+        //let flag = false;
+
+        let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/room/updatestat"
+        let data = {
+            rstat:stat,
+            rid:rid,
+            bid:bid
+        }
+        $.ajax({
+            type: "PUT",
+            url: url,
+            data:data,
+            success: function(data){
+                //flag = true;
+            }
+        });
+
+        //return flag;
+    }
+
     updateRoomStat = async (rid,stat) => {
         let bid = await eel.get_branchId()();
         let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/room/updatestat"
@@ -456,6 +639,216 @@ $(document).ready(function () {
             }
         });
     }
+
+    $("#resetServiceModal").click(function(){
+        $("#addServiceForm").trigger('reset');
+        $("#serviceTableBody").html("")
+    })
+
+    $("#submitServiceModal").click(function(){
+        let html = $("#serviceTableBody").html()
+        html.trim();
+        if(html==""){
+            //console.log("no data");
+            alert("Add Services!");
+        }else{
+            //console.log("data added");
+            let sql = "";
+            let cid = $("#serviceModal #custId").attr("cust-id")
+            $("#serviceTableBody").children().each(function(){
+                //console.log("e : ",$(this).html());
+                let sname = $(this).find("td[id='sname']").html()
+                let scost = $(this).find("td[id='scost']").html()
+                let sqnty = $(this).find("td[id='sqnty']").html()
+                let subtotal = $(this).find("td[id='subtotal']").html()
+                sql+=`('','${sname} (Rs.${scost}) x ${sqnty}',1,${subtotal},'${cid}',1),`
+            });
+            let finsql = sql.slice(0,-1)+";";
+            console.log("final value = ",finsql);
+        }
+    })
+
+    setServTableAction = () => {
+        $("#serviceTableBody > tr > td > .btn.btn-danger").click(function(){
+            $(this).closest("tr").remove();
+        })
+    }
+
+    $("#addServiceForm").submit(function(e){
+        e.preventDefault();
+        let sname = $("#serviceName").val()
+        let selected = $("#serviceList").children().filter(function(){return $(this).val()==sname})
+        let sid = selected.attr("sid")
+        sid = sid?sid:"-1";
+        let scost = $("#serviceCost").val()
+        let sqnty = $("#serviceQnty").val()
+        let subTotal = $("#serviceTotal").val()
+
+        let html = `<tr id="${sid}">
+                        <td id="sname">${sname}</td>
+                        <td id="scost">${scost}</td>
+                        <td id="sqnty">${sqnty}</td>
+                        <td id="subtotal">${subTotal}</td>
+                        <td><button type="button" class="btn btn-danger" data-toggle="tooltip" 
+                        data-placement="bottom" title="Delete Room">&#9866;</button></td>
+                    </tr>`
+        let prevHtml = $("#serviceTableBody").html()
+
+        $("#serviceTableBody").html("")
+        $("#serviceTableBody").html(prevHtml+html)
+        setServTableAction();
+        $("#serviceTableBody td").css('vertical-align','middle');
+        $("#addServiceForm").trigger('reset');
+    })
+
+    renderChangeRoom = async (rid) => {
+
+        let bid = await eel.get_branchId()();
+
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/checkin/custdata"
+
+        data = {
+            "bid":bid,
+            "rid":rid
+        }
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(data){
+                //console.log(data)
+                let d = data["data"][0]
+                $("#changeRoomModalCentered #roomId").val(d["rname"]);
+                $("#changeRoomModalCentered #roomId").attr("room-id",d["roomNumber"]);
+                $("#changeRoomModalCentered #custId").val(d["custName"]);
+                $("#changeRoomModalCentered #custId").attr("cust-id",d["checkinid"]);
+            }
+        })
+
+    }
+
+    $("#serviceQnty").on('input click keyup change',function(){
+        if($("#serviceName").val()!=""){
+            let value = Number($("#serviceCost").val()) * Number($(this).val())
+            $("#serviceTotal").val(value)
+        }else{
+            $(this).val("")
+            $("#serviceTotal").val("")
+        }
+    })
+
+    $("#serviceCost").on('input click keyup',function(){
+        if($("#serviceName").val()!=""){
+            let value = Number($("#serviceQnty").val()) * Number($(this).val())
+        $("#serviceTotal").val(value)
+        }else{
+            $(this).val("")
+            $("#serviceTotal").val("")
+        }
+    })
+
+    setServiceListAction = () => {
+        $("#serviceName").change(function(){
+            let v = $(this).val()
+            if(v!=""){
+                let selected = $("#serviceList").children().filter(function(){return $(this).val()==v})
+                $("#serviceCost").val(selected.attr("scost"))
+                $("#serviceQnty").val("1").change()
+            }else{
+                $("#serviceTotal").val("")
+                $("#serviceQnty").val("")
+                $("#serviceCost").val("")
+            }
+        })
+    }
+
+    renderServiceList = (bid) => {
+
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/service-branch/frontlist/"+bid
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(data){
+                //console.log(data)
+                let d = data["data"]
+                console.log("data",d)
+                let html = ''
+                d.forEach(item => {
+                   s = `<option scost="${item['serviceCost']}" sid="${item['serviceId']}" value="${item['sname']}" >${item['sname']}</option>`
+                   html+=s
+                });
+                $("#serviceList").html(html);
+                setServiceListAction();
+            }
+        })
+
+    }
+
+    renderService = async (rid) => {
+
+        let bid = await eel.get_branchId()();
+
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/checkin/custdata"
+
+        data = {
+            "bid":bid,
+            "rid":rid
+        }
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(data){
+                //console.log(data)
+                let d = data["data"][0]
+                $("#serviceModal #roomId").val(d["rname"]);
+                $("#serviceModal #roomId").attr("room-id",d["roomNumber"]);
+                $("#serviceModal #custId").val(d["custName"]);
+                $("#serviceModal #custId").attr("cust-id",d["checkinid"]);
+                renderServiceList(bid);
+            }
+        })
+
+        //$("#serviceTableBody td").css('vertical-align','middle');
+    }
+
+    renderAdvance = async (rid) => {
+
+        let bid = await eel.get_branchId()();
+
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/checkin/custdata"
+
+        data = {
+            "bid":bid,
+            "rid":rid
+        }
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(data){
+                //console.log(data)
+                let d = data["data"][0]
+                $("#advanceModal #roomId").val(d["rname"]);
+                $("#advanceModal #roomId").attr("room-id",d["roomNumber"]);
+                $("#advanceModal #custId").val(d["custName"]);
+                $("#advanceModal #custId").attr("cust-id",d["checkinid"]);
+            }
+        })
+
+    }
+
+    $("#advanceForm #payMode").change(function(){
+        //console.log('advance pay',$(this).val())
+        if($(this).val()==2)
+            $("#advanceForm #cardNumber").css("display","block");
+        else
+            $("#advanceForm #cardNumber").css("display","none");
+    })
 
     setAction_forlinks = () => {
         // $("a.dropdown-item").click(function(){
@@ -491,7 +884,10 @@ $(document).ready(function () {
         //occupied to changeroom
         $("a.dropdown-item.change-room").click(function(){
             let rid = $(this).closest("div").attr("aria-labelledby")
+            settingTime();
             $('#changeRoomModalCentered').modal('show');
+            renderChangeRoom(rid);
+            $("#changeRoomModalCentered #cust-rnum").prop('disabled',true)
             //updateRoomStat(rid,0)
         });
 
@@ -504,6 +900,21 @@ $(document).ready(function () {
             //updateRoomStat(rid,0)
         });
 
+        //add service
+        $("a.dropdown-item.service").click(function(){
+            let rid = $(this).closest("div").attr("aria-labelledby")
+            $('#serviceModal').modal('show');
+            renderService(rid);
+            //renderAdvance(rid);
+        });
+
+        //pay advance
+        $("a.dropdown-item.advance").click(function(){
+            let rid = $(this).closest("div").attr("aria-labelledby")
+            $('#advanceModal').modal('show');
+            renderAdvance(rid);
+        });
+
         //free to checking
         $("a.dropdown-item.checkin").click(function(){
             let rid = $(this).closest("div").attr("aria-labelledby")
@@ -511,8 +922,8 @@ $(document).ready(function () {
             settingTime();
             let data = roomData.filter(room => room['roomId']==rid)
             //console.log("selected room : ",data);
-            $('#cust-rtype').val(data[0]['roomType']).change()
-            $('#cust-rnum').val(data[0]['roomId']).change()
+            $('#checkInModal #checkInForm #cust-rtype').val(data[0]['roomType']).change()
+            $('#checkInModal #checkInForm #cust-rnum').val(data[0]['roomId']).change()
             //updateRoomStat(rid,0)
         });
     }
@@ -531,6 +942,20 @@ $(document).ready(function () {
         $('#checkOutForm').trigger("reset");
         settingTime();
       })
+
+      $('#advanceModal').on('hidden.bs.modal', function (e) {
+        //console.log("i am working");
+        $('#advanceForm').trigger("reset");
+        $("#advanceModal #advanceForm #cardNumber").css('display','none');
+        settingTime();
+      })
+
+      $('#changeRoomModalCentered').on('hidden.bs.modal', function (e) {
+        //console.log("i am working");
+        $('#changeRoomForm').trigger("reset");
+        settingTime();
+      })
+
 
     generateStats = (data) => {
         let l = data.length;
@@ -582,6 +1007,7 @@ $(document).ready(function () {
             success: function(data){
                 generateStats(data["data"])
                 renderRooms(data["data"])
+                getAllRoomDetails()
             }
         });
     }

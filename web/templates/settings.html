@@ -27,9 +27,9 @@
           <li class="nav-item">
             <a data-screen="serviceRender" class="nav-link" href="#">Service</a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a data-screen="employeeRender" class="nav-link" href="#">Employee</a>
-          </li>
+          </li> -->
           <!-- <li class="nav-item">
             <a data-screen="refRender" class="nav-link" href="#">Referral</a>
           </li> -->
@@ -230,7 +230,14 @@
                   <option value="2">Extra Bed</option>
                 </select>
 
-                <input class="form-control my-2" type="text" placeholder="New Service Name" />
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <input type="checkbox" aria-label="Checkbox for following text input">
+                    </div>
+                  </div>
+                  <input placeholder="New Service Name" type="text" class="form-control" aria-label="Text input with checkbox">
+                </div>
                 <input class="form-control my-2" type="number" placeholder="Service Cost" />
                       
                 
@@ -246,17 +253,15 @@
                 data-placement="bottom" title="Delete Room">&#9866;</button>
                 <button type="button" class="btn btn-success mx-1" data-toggle="tooltip" 
                 data-placement="bottom" title="Clear Fields">&#9851;</button>
-                <button type="button" class="btn btn-primary mx-1" data-toggle="tooltip" 
-                data-placement="bottom" title="Upload Excel">&#10514;</button>
 
               </div>
 
               
             </div>
-            <div class="modal-footer">
+            <!-- <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

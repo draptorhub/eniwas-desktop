@@ -35,13 +35,13 @@
             <span id="mname">Manager Name</span>
           </p>
           <li>
-              <a href="#">Revise</a>
+              <a href="./revise.html">Revise</a>
           </li>
           <li>
-              <a href="#">History</a>
+              <a href="./history.html">History</a>
           </li>
           <li>
-            <a href="#">Analytics</a>
+            <a>Analytics</a>
           </li>
       </ul>
 
@@ -106,30 +106,32 @@
 </div>
 
 <!-- Advance Modal -->
-<div class="modal" id="exampleModalCentered" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredLabel" aria-hidden="true">
+<div class="modal" id="advanceModal" tabindex="-1" role="dialog" aria-labelledby="advanceModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenteredLabel">Advance Receipt</h5>
+        <h5 class="modal-title" id="advanceModalLabel">Advance Receipt</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <form id="advanceForm">
       <div class="modal-body">
-        <input class="form-control my-1" type="text" value="GF04" placeholder="Room Number" readonly>
-        <input class="form-control my-1" type="text" value="Mr.Guatham" placeholder="Guest Name" readonly>
-        <input class="form-control my-1" type="number" placeholder="Amount">
-        <select class="custom-select my-1">
-          <option selected>Payment Type</option>
+        <input class="form-control my-1" type="text" id="roomId" room-id="" value="GF04" placeholder="Room Number" readonly />
+        <input class="form-control my-1" type="text" id="custId" cust-id="" value="Mr.Guatham" placeholder="Guest Name" readonly />
+        <input class="form-control my-1" type="number" id="advAmount" placeholder="Amount" required/>
+        <select class="custom-select my-1" id="payMode" required>
+          <option value = "">Payment Type</option>
           <option value="1">Cash</option>
           <option value="2">Card</option>
           <option value="3">UPI</option>
         </select>
+        <input style="display: none;" id="cardNumber" class="form-control my-1" type="text" placeholder="Card Number" />
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save</button>
-      </div>
+        <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div></form>
     </div>
   </div>
 </div>
@@ -145,45 +147,47 @@
         </button>
       </div>
       <div class="modal-body">
-        <input class="form-control my-1" type="text" value="GF04" placeholder="Room Number" readonly />
-        <input class="form-control my-1" type="text" value="Mr.Guatham" placeholder="Guest Name" readonly />
-        <table class="table">
+        <div class="row my-2">
+          <div class="col">
+            <input id="roomId" room-id="" class="form-control" type="text" value="GF04" placeholder="Room Number" readonly />
+          </div>
+          <div class="col">
+            <input id="custId" cust-id="" class="form-control" type="text" value="Mr.Guatham" placeholder="Guest Name" readonly />
+          </div>
+        </div>
+        <form id="addServiceForm">
+        <div class="row my-2">
+          <div class="col-4">
+            <input class="form-control" id="serviceName" placeholder="Service Name" type="text" list="serviceList" required/>
+            <datalist id="serviceList">
+            </datalist>
+          </div>
+          <div class="col-2">
+            <input class="form-control" id="serviceCost" type="number" value="" placeholder="MRP" required />
+          </div>
+          <div class="col-2">
+            <input class="form-control" id="serviceQnty" min="0" type="number" value="" placeholder="Qnty" required />
+          </div>
+          <div class="col-2">
+            <input class="form-control" id="serviceTotal" type="text" value="" placeholder="Total" readonly/>
+          </div>
+          <div class="col-2">
+            <button type="submit" class="btn btn-primary">&#10010;</button>
+            <button type="reset" class="btn btn-success">&#9851;</button>
+          </div>
+        </div></form>
+        <table class="table my-2">
           <thead>
             <tr>
-              <th>#</th>
               <th>Product</th>
+              <th>MRP</th>
               <th>Qnty</th>
-              <th>Rate</th>
+              <th>Sub Total</th>
+              <th>&nbsp;&nbsp;</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>
-                <select class="custom-select">
-                  <option selected>Select Product</option>
-                  <option value="1">7Up</option>
-                  <option value="2">Sandwich</option>
-                  <option value="3">Extra Bed</option>
-                </select>
-              </td>
-              <td><input class="form-control w-50" type="number" value="1" placeholder="Default input"></td>
-              <td>&#8377;.1000</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>
-                <select class="custom-select">
-                  <option selected>Select Product</option>
-                  <option value="1">7Up</option>
-                  <option value="2">Sandwich</option>
-                  <option value="3">Extra Bed</option>
-                </select>
-              </td>
-              <td><input class="form-control w-50" type="number" value="1" placeholder="Qnty"></td>
-              <td>&#8377;.10</td>
-            </tr>
-          </tbody>
+          <!-- Service gets added here -->
+          <tbody id="serviceTableBody"></tbody>
         </table>
         <div class="form-group row">
           <label for="inputEmail3" class="col-sm-2 col-form-label">Total : </label>
@@ -193,8 +197,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Add Services</button>
+        <button id="resetServiceModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="submitServiceModal" type="button" class="btn btn-primary">Add Services</button>
       </div>
     </div>
   </div>
@@ -216,32 +220,37 @@
             <form class="p-2">
               <fieldset>
                <legend>From:</legend>
-               <input class="form-control my-1" type="text" value="GF04" placeholder="Room Number" readonly />
-               <input class="form-control my-1" type="text" value="Mr.Gautham" placeholder="Guest Name" readonly />
+               <input id="roomId" room-id="" class="form-control my-1" type="text" value="GF04" placeholder="Room Number" readonly />
+               <input id="custId" cust-id="" class="form-control my-1" type="text" value="Mr.Gautham" placeholder="Guest Name" readonly />
               </fieldset>
             </form> 
           </div>
           <div class="w-50 float-left">
-            <form class="p-2">
+            <form id="changeRoomForm" class="p-2">
               <fieldset>
                <legend>To:</legend>
-               <select class="custom-select my-1">
-                <option selected>Select Room</option>
+               <select id="cust-rtype" class="custom-select my-1" required>
+                <option value="">Room Type</option>
+                <option value="1">Deluxe</option>
+                <option value="2">Classic</option>
+                <option value="3">Suite</option>
+              </select>
+               <select id="cust-rnum" class="custom-select my-1" required>
+                <option value="">Room Number</option>
                 <option value="1">GF01</option>
                 <option value="2">GF03</option>
                 <option value="3">FF02</option>
               </select>
-               <input class="form-control my-1" type="date" placeholder="Date" />
-               <input class="form-control my-1" type="time" placeholder="Time" />
+               <input id="changeRoomdt" class="form-control my-1" type="datetime-local" readonly/>
               </fieldset>
-            </form> 
+             
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Update</button>
-      </div>
+        <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Update</button>
+      </div></form>
     </div>
   </div>
 </div>
@@ -599,19 +608,6 @@
           <div class="col-2"><input class="form-control" id="cust-guest" type="number" placeholder="Guests" required></div>
         </div>
 
-        <div class="row my-2">
-          <div class="col-3"><input id="cust-adv" class="form-control" type="number" placeholder="Advance"></div>
-          <div class="col-3">
-            <select id="cust-pay" class="custom-select" required>
-              <option value="" selected>Select Payment</option>
-              <option value="1">Cash</option>
-              <option value="2">Card</option>
-              <option value="3">UPI</option>
-            </select>
-          </div>
-          <div class="col-6"><input id="cust-card" class="form-control" type="text" placeholder="Card Number" disabled /></div>
-        </div>
-
         <div class="row">
           <div class="col-3">
             <select id="cust-rtype" class="custom-select" required>
@@ -662,16 +658,29 @@
             <div class="p-2">
               <input class="form-control my-1" type="hidden" value="RID-001" id="roomId"  />
               <input class="form-control my-1" type="text" value="GF04" id="roomName" placeholder="Room Number" readonly />
-              <input class="form-control my-1" type="datetime-local" placeholder="CheckIn Datetime" id="checkindt" readonly/>
-              <input class="form-control my-1" type="datetime-local" placeholder="Checkout Datetime" id="checkoutdt" readonly/>
-              <div class="col">
+              
+              
+              <div class="form-group row">
+                <label for="checkindt" class="col-sm-4 col-form-label">Check In</label>
+                <div class="col-sm-8">
+                  <input class="form-control my-1" type="datetime-local" placeholder="CheckIn Datetime" id="checkindt" readonly/>
+                </div>
+              </div>
+              
+              <div class="form-group row">
+                <label for="checkoutdt" class="col-sm-4 col-form-label">Check Out</label>
+                <div class="col-sm-8">
+                  <input class="form-control my-1" type="datetime-local" placeholder="Checkout Datetime" id="checkoutdt" readonly/>
+                </div>
+              </div>
+
                 <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-3 col-form-label">Bill# : </label>
-                  <div class="col-sm-9">
+                  <label for="billNum" class="col-sm-4 col-form-label">Bill#</label>
+                  <div class="col-sm-8">
                     <input type="text" class="form-control" id="billNum" placeholder="Bill#" readonly>
                   </div>
                 </div>
-              </div>
+              
             </div> 
           </div>
           <div class="w-50 float-left">
@@ -694,7 +703,7 @@
           </div>
         </div>
 
-        <div class="row my-2">
+        <div style="clear:both;" class="row my-2">
           <div class="col">
             <select id="paymode" class="custom-select" required>
               <option value="">Payment Mode</option>
@@ -704,7 +713,7 @@
             </select>
           </div>
           <div class="col">
-            <input id="cardNum" class="form-control" type="text" placeholder="Default input" disabled>
+            <input id="cardNum" class="form-control" type="text" placeholder="Card Number" disabled>
           </div>
         </div>
 
