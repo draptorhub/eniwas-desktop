@@ -1,12 +1,8 @@
 {% extends 'layout.html' %}
-{% block title %} eNiwas | History {% endblock %}
+{% block title %} eNiwas | Revise {% endblock %}
 {% block head_scripts %}
-  <script type="text/javascript" src="../scripts/history.js"></script>
+  <script type="text/javascript" src="../scripts/revise.js"></script>
   <!-- <link rel="stylesheet" href="../style/index.css"> -->
-  <style>
-    
-  </style>
-
 {% endblock %}
 
 {% block content %}
@@ -36,33 +32,19 @@
     <div style="width:100%;display: inline;float: left;">
 
       <div class="p-3">
-        <table id="historyTable" class="table">
+        <table id="reviseTable" class="table">
           <thead>
             <th>Room#</th>
             <th>Customer Name</th>
-            <th>Details</th>
-            <th>Bill Amount</th>
+            <th>Check In</th>
+            <th>Amount</th>
           </thead>
           <tbody>
-            <tr>
-              <td>102</td>
-              <td class="custName" id="">Dimple</td>
-              <td>
-                <div class="row d-flex">
-                  <div class="d-inline float-left px-2">
-                    <h1>3</h1>
-                  </div>
-                  <div class="d-inline float-left">
-                    <div class="px-2">12-10-2021</div>
-                    <div class="px-2">15-10-2021</div>
-                  </div>
-                </div>
-              </td>
-              <td>1000</td>
-            </tr>
+            
           </tbody>
         </table>
       </div>
+      
     </div>
   </div>
 
