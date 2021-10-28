@@ -192,7 +192,7 @@
         <div class="form-group row">
           <label for="inputEmail3" class="col-sm-2 col-form-label">Total : </label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputEmail3" value="&#8377;.500" placeholder="Total Amount">
+            <input type="number" class="form-control" id="totalService" value="" placeholder="Total Amount" readonly>
           </div>
         </div>
       </div>
@@ -611,17 +611,17 @@
         <div class="row">
           <div class="col-3">
             <select id="cust-rtype" class="custom-select" required>
-              <option value="" selected>Room Type</option>
+              <option value="">Room Type</option>
             </select>
           </div>          
           <div class="col-3">
             <select id="cust-rnum" class="custom-select" required>
-              <option value="" selected>Select Room#</option>
+              <option value="">Select Room#</option>
             </select>
           </div>
           <div class="col-3">
             <select id="cust-rplan" class="custom-select" required>
-              <option value="" selected>Rate Plan</option>
+              <option value="">Rate Plan</option>
               <option value="1">Continental</option>
               <option value="2">American</option>
               <option value="3">European</option>
@@ -724,6 +724,7 @@
                 <tr>
                   <th>Date</th>
                   <th>Particulars</th>
+                  <th>Tax</th>
                   <th>Amount</th>
                 </tr>
               </thead>
@@ -731,23 +732,23 @@
                 <!-- particular rows-->
               </tbody>
             </table>
-            <div class="alert alert-primary" role="alert">
+            <!-- <div class="alert alert-primary" role="alert">
               <strong>Sub Total (&#8377;) : </strong><span id="subTotal"></span>&nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;<strong>Total (&#8377;) : </strong><span id="totalBill"></span>
-            </div>
+            </div> -->
           </div>
           <div class="w-25 float-left">
             <div class="p-2">
               <div class="form-group">
                 <label for="paidAmount">Paid (&#8377;) :</label>
-                <input type="text" class="form-control" id="paidAmount" value="&#8377;.525" placeholder="Paid Amount" readonly>
+                <input type="text" class="form-control" id="paidAmount" value="525" placeholder="Paid Amount" readonly>
               </div>
               <div class="form-group">
                 <label for="dueAmount">Due (&#8377;) :</label>
-                <input type="text" class="form-control" id="dueAmount" value="&#8377;.400" placeholder="Due Amount" readonly>
+                <input type="text" class="form-control" id="dueAmount" value="400" placeholder="Due Amount" readonly>
               </div>
               <div class="form-group">
-                <label for="taxAmount">Tax (&#8377;) :</label>
-                <input type="text" class="form-control" id="taxAmount" value="&#8377;.925" placeholder="Total Bill" readonly>
+                <label for="taxAmount">Total (&#8377;) :</label>
+                <input type="text" class="form-control" id="totalBill" value="925" placeholder="Total Bill" readonly>
               </div>
             </div>
           </div>

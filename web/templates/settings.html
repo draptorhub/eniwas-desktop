@@ -186,7 +186,7 @@
           </button>
         </div>
         <div class="p-3">
-          <table class="table">
+          <table id="serviceTable" class="table">
             <thead>
               <th>#</th>
               <th>Service Name</th>
@@ -223,9 +223,9 @@
               <!-- CRUD Operation-->
               <div class="row p-3">
                 
-                <select class="custom-select my-2">
-                  <option selected>Service Name</option>
-                  <option value="1">Other</option>
+                <select id="serviceId" class="custom-select my-2">
+                  <option value="">Select Service</option>
+                  <option value="-1">Create New</option>
                   <option value="1">7Up</option>
                   <option value="2">Extra Bed</option>
                 </select>
@@ -233,12 +233,12 @@
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <div class="input-group-text">
-                      <input type="checkbox" aria-label="Checkbox for following text input">
+                      <input id="serviceEnabled" type="checkbox" aria-label="Checkbox for following text input">
                     </div>
                   </div>
-                  <input placeholder="New Service Name" type="text" class="form-control" aria-label="Text input with checkbox">
+                  <input id="serviceName" placeholder="New Service Name" type="text" class="form-control" aria-label="Text input with checkbox">
                 </div>
-                <input class="form-control my-2" type="number" placeholder="Service Cost" />
+                <input id="serviceCost" class="form-control my-2" type="number" placeholder="Service Cost" />
                       
                 
               </div>
