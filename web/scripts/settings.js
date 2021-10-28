@@ -20,6 +20,121 @@ $( document ).ready(function() {
 
     }
 
+    renderServiceTable = (array) => {
+        let html = ''
+        let i = 1;
+        array.forEach(element => {
+            let subHtml =''
+            subHtml = `<tr>
+                        <td>${i++}</td>
+                        <td>${element['sname']}</td>
+                        <td>${element['serviceCost']}</td>
+                       </tr>`
+            html+=subHtml;
+        });
+        $("#serviceTable tbody").html(html)
+    }
+
+    $("#addServiceModal .d-flex.justify-content-center .btn.btn-primary").click(function(){
+        console.log("add button clicked")
+    })
+
+    populateServices = async () => {
+
+        let bid = await eel.get_branchId()();
+        let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/service-branch/fronttable/"+bid
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(data){
+                renderServiceTable(data["data"]);
+            }
+        });
+
+    }
+
+    addExistingService = (sid,bid,stat,scost) => {
+
+        let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/service-branch/create"
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function(data){
+                //renderServiceTable(data["data"]);
+                console.log("data");
+            }
+        });
+
+    }
+
+    const serviceOnChange = () => {
+
+        $("#serviceId").change(function(){
+            let v  = $(this).val()
+            //console.log('val : ',v)
+            //console.log('item text : ',$(this).val())
+            switch(v){
+                case '': 
+                    $("#serviceName").val("")
+                    $("#serviceName").prop("disabled",true);
+                    $("#serviceCost").prop("disabled",true);
+                    $("#serviceEnabled").prop("disabled",true);
+                    break;  
+                case "-1":
+                    $("#serviceName").val("")
+                    $("#serviceName").prop("disabled",false);
+                    $("#serviceCost").prop("disabled",false);
+                    $("#serviceEnabled").prop("disabled",false);
+                    break;
+                default:
+                    let t = $('#serviceId :selected').text();
+                    $("#serviceName").val(t)
+                    $("#serviceName").prop("disabled",true);
+                    $("#serviceCost").prop("disabled",false);
+                    $("#serviceEnabled").prop("disabled",false);
+                    break;
+
+            }
+            
+        })
+
+        $("#serviceId").val("").change()
+
+    }
+
+    renderServiceSelect = (array) => {
+
+        let html = ''
+
+        html+='<option value="">Select Service</option>'
+        html+='<option value="-1">Create New</option>'
+
+        array.forEach(element => {
+            html+=`<option value="${element['servicesId']}">${element['serviceName']}</option>`
+        });
+
+        $("#serviceId").html(html)
+        serviceOnChange()
+    }
+
+
+    getServiceSelect = async () => {
+
+        let bid = await eel.get_branchId()();
+        let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/service/frontlist/"+bid
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(data){
+                renderServiceSelect(data["data"]);
+            }
+        });
+
+    }
+
     renderSelectOptions = (data) => {
         let html = ''
         html+='<option selected value="-999">Room Type</option>'
@@ -205,5 +320,6 @@ $( document ).ready(function() {
 
     populateRooms();
     populate_roomTypes();
-
+    populateServices();
+    getServiceSelect();
 });

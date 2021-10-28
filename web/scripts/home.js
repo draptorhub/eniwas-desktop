@@ -282,8 +282,8 @@ $(document).ready(function () {
     copyData = (data) => {
         roomData = [];
         roomData = [...data];
-        console.log('api data after passing : ',data);
-        console.log('room Data : ',roomData);
+        //console.log('api data after passing : ',data);
+        //console.log('room Data : ',roomData);
     }
 
     setRoomAction = () => {
@@ -453,13 +453,15 @@ $(document).ready(function () {
         switch(statCode){
             case 0:
                 s+=`<a class="dropdown-item checkin">CheckIn</a>
+                <a class="dropdown-item maintenance">Maintenace</a>
                 <a class="dropdown-item management">Management</a>`;
                 break;
             case 1:
                 s+=`<a class="dropdown-item maintenance">Maintenace</a>`;
                 break;
             case 2:
-                s+=`<a class="dropdown-item ready">Ready</a>`;
+                s+=`<a class="dropdown-item dirty">Dirty</a>
+                <a class="dropdown-item ready">Ready</a>`;
                 break;
             case 3:
                 s+=`<a class="dropdown-item free">Free</a>`;
@@ -505,6 +507,57 @@ $(document).ready(function () {
 
     }
 
+    const copyBillData = (data) => {
+        billData = [];
+        billData = [...data];
+        console.log("copied data : ",billData);
+    }
+
+    getCustomerBills = (ciid) => {
+
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/bills/get/"+ciid;
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: data,
+            success: function(data){
+               let array = data["data"]
+               let html = ''
+               let paid = 0;
+               paid = Number($("#checkOutModal #checkOutForm #paidAmount").val())
+               let due = 0;
+               due = Number($("#checkOutModal #checkOutForm #dueAmount").val())
+               let total = 0;
+               total = Number($("#checkOutModal #checkOutForm #totalBill").val())
+               let subPaid = 0;
+               let subDue = 0;
+               array.forEach(d => {
+                    html+=particularsRender(d["billType"]>0?true:false,d["billDatetime"],d["billDesc"],0,d["billAmt"])
+                    if(d["billType"]<0){
+                        subPaid+=Number(d["billAmt"]);
+                    }else{
+                        subDue+=Number(d["billAmt"]);
+                    }
+                });
+                paid+=subPaid
+                total+=subDue;
+                due=total-paid;
+
+                let prevhtml = $("#checkOutModal #checkOutForm #particularDesc").html()     
+                html = prevhtml+html;
+                $("#checkOutModal #checkOutForm #particularDesc").html(html)
+
+                $("#checkOutModal #checkOutForm #paidAmount").val(paid)
+                $("#checkOutModal #checkOutForm #dueAmount").val(due)
+                $("#checkOutModal #checkOutForm #totalBill").val(total)
+            }
+
+        });
+
+    }
+
+
     renderCheckout = async (rid) => {
 
         $("#checkOutModal #checkOutForm #roomId").val(rid)
@@ -538,41 +591,59 @@ $(document).ready(function () {
                 let tax = 0;
                 let subTotal = 0;
                 let total = 0;
-                 
-                due = d["roomCharge"]*days;
+                let subDue = 0;
 
-                subTotal = paid + due;
-                tax = taxAmount(subTotal);
-                total = subTotal + tax;
+                subDue = (Number(d["roomCharge"])+taxAmount(Number(d["roomCharge"])))*days;
+                total+=subDue;
+                due= total-paid;
+
+
 
                 let html = ''
+                let checkinDatetime = timeAdjust(d["cidt"])
+                let roomCharge = d["roomCharge"]
 
-                html+=particularsRender(true,d["cidt"],'Room Cost x '+days,d["roomCharge"]*days)
-                $("#checkOutModal #checkOutForm #particularDesc").html(html)
+                if(days>1){
+                    let newHtml = ''
+                    let now = new Date();
+                    for (let d = new Date(checkinDatetime); d <= now; d.setDate(d.getDate() + 1)) {
+                        console.log('travdate : ',d)
+                        newHtml+=particularsRender(true,d,`Room Cost (&#8377; ${roomCharge}) x 1`,taxAmount(Number(roomCharge)),roomCharge)
+                    }
+                    //newHtml+=particularsRender(true,d["cidt"],'Coming Soon x 1',taxAmount(Number(d["roomCharge"])),d["roomCharge"]*days)
+                    $("#checkOutModal #checkOutForm #particularDesc").html(newHtml)
+                }else{
+                    html+=particularsRender(true,d["cidt"],`Room Cost (&#8377; ${d["roomCharge"]}) x `+days,taxAmount(Number(d["roomCharge"])),d["roomCharge"]*days)
+                    $("#checkOutModal #checkOutForm #particularDesc").html(html)
+                }
 
-                //`&#8377;.${paid}`
 
-                $("#checkOutModal #checkOutForm #subTotal").html(subTotal);
-                $("#checkOutModal #checkOutForm #totalBill").html(total);
+                //$("#checkOutModal #checkOutForm #subTotal").html(subTotal);
+                $("#checkOutModal #checkOutForm #totalBill").val(total);
                 $("#checkOutModal #checkOutForm #paidAmount").val(paid);
                 $("#checkOutModal #checkOutForm #dueAmount").val(due);
-                $("#checkOutModal #checkOutForm #taxAmount").val(tax);
+                //$("#checkOutModal #checkOutForm #taxAmount").val(tax);
 
+                getCustomerBills(d["checkinid"])
             }
           });
+
+          //console.log("retv bill data : ",billData);
     }
 
-    particularsRender = (encash,pdate,pdesc,pcost) => {
+    particularsRender = (encash,pdate,pdesc,ptax,pcost) => {
         let uprow = `<tr class="table-danger">
                         <th>${dateString(pdate)}</th>
-                        <td>${pdesc}</td>
-                        <td>&#8377; ${pcost}</td>
+                        <td style="max-width:200px;word-wrap: break-word;">${pdesc}</td>
+                        <td>&#8377; ${ptax}</td>
+                        <td>&#8377; ${ptax + pcost}</td>
                      </tr>`
 
         let downrow = `<tr class="table-success">
                         <th>${dateString(pdate)}</th>
-                        <td>${pdesc}</td>
-                        <td>&#8377; ${pcost}</td>
+                        <td style="max-width:200px;word-wrap: break-word;">${pdesc}</td>
+                        <td>&#8377; ${ptax}</td>
+                        <td>&#8377; ${ptax + pcost}</td>
                        </tr>`
         if(encash)
             return uprow;
@@ -643,7 +714,26 @@ $(document).ready(function () {
     $("#resetServiceModal").click(function(){
         $("#addServiceForm").trigger('reset');
         $("#serviceTableBody").html("")
+        $("#totalService").val("")
     })
+
+    finalServiceApiCall = (sql) => {
+
+        let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/bills/addservices"
+        let data = {
+            stmt:sql,
+        }
+        $.ajax({
+            type: "POST",
+            url: url,
+            data:data,
+            success: function(data){
+                $('#serviceModal').modal('hide');
+                alert("Service Added!");
+            }
+        });
+
+    }
 
     $("#submitServiceModal").click(function(){
         let html = $("#serviceTableBody").html()
@@ -664,13 +754,15 @@ $(document).ready(function () {
                 sql+=`('','${sname} (Rs.${scost}) x ${sqnty}',1,${subtotal},'${cid}',1),`
             });
             let finsql = sql.slice(0,-1)+";";
-            console.log("final value = ",finsql);
+            finalServiceApiCall(finsql);
+            //console.log("final value = ",finsql);
         }
     })
 
     setServTableAction = () => {
         $("#serviceTableBody > tr > td > .btn.btn-danger").click(function(){
             $(this).closest("tr").remove();
+            renderServiceTotal();
         })
     }
 
@@ -694,12 +786,27 @@ $(document).ready(function () {
                     </tr>`
         let prevHtml = $("#serviceTableBody").html()
 
+        
+
         $("#serviceTableBody").html("")
         $("#serviceTableBody").html(prevHtml+html)
         setServTableAction();
         $("#serviceTableBody td").css('vertical-align','middle');
         $("#addServiceForm").trigger('reset');
+        renderServiceTotal();
     })
+
+    renderServiceTotal = () => {
+        let total = 0;
+        $("#serviceTableBody").children().each(function(){
+            let h = $(this).find("td[id='subtotal']").html()
+            total+=Number(h);
+        })
+        if(total>0)
+            $("#totalService").val(total)
+        else
+            $("#totalService").val(0)
+    }
 
     renderChangeRoom = async (rid) => {
 
@@ -915,6 +1022,13 @@ $(document).ready(function () {
             renderAdvance(rid);
         });
 
+        $("a.dropdown-item.dirty").click(function(){
+            let rid = $(this).closest("div").attr("aria-labelledby")
+            updateRoomStat(rid,1)
+            //$('#advanceModal').modal('show');
+            //renderAdvance(rid);
+        });
+
         //free to checking
         $("a.dropdown-item.checkin").click(function(){
             let rid = $(this).closest("div").attr("aria-labelledby")
@@ -953,6 +1067,14 @@ $(document).ready(function () {
       $('#changeRoomModalCentered').on('hidden.bs.modal', function (e) {
         //console.log("i am working");
         $('#changeRoomForm').trigger("reset");
+        settingTime();
+      })
+
+      $('#serviceModal').on('hidden.bs.modal', function (e) {
+        //console.log("i am working");
+        $('#addServiceForm').trigger("reset");
+        $("#totalService").val("")
+        $("#serviceTableBody").html("")
         settingTime();
       })
 
