@@ -35,6 +35,7 @@ $(document).ready(function () {
         data.forEach(d => {
            let s = ''
             s =  `<tr>
+            <th>${d['row_num']}</th>
             <td>${d['rname']}</td>
             <td class="custName" id="${d['checkoutid']}">${d['custname']}</td>
             <td>

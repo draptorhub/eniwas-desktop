@@ -1,4 +1,3 @@
-
 $( document ).ready(function() {
     
     var scrOn = "#roomRender";
@@ -25,18 +24,129 @@ $( document ).ready(function() {
         let i = 1;
         array.forEach(element => {
             let subHtml =''
-            subHtml = `<tr>
-                        <td>${i++}</td>
+            subHtml = `<tr id="${element['serviceId']}" class="${element['serviceEnabled']==1?'table-success':'table-danger'}">
+                        <td scope="row">${i++}</td>
                         <td>${element['sname']}</td>
                         <td>${element['serviceCost']}</td>
                        </tr>`
             html+=subHtml;
         });
         $("#serviceTable tbody").html(html)
+        setServiceRowClick();
+    }
+
+    resetAddServiceModal = () => {
+
+        $("#addServiceModal .modal-body #serviceId").prop("disabled",false);
+        $("#addServiceModal .modal-body #serviceId").val("").change();
+        resetServiceButtons();
+    }
+
+    setServiceRowClick = () => {
+
+        $("#serviceTable tbody tr").click(function(){
+            let sid = $(this).attr("id");
+            let sclass = $(this).attr("class");
+            let sname = $(this).find("td:nth-child(2)").html()
+            let scost = $(this).find("td:nth-child(3)").html()
+            //console.log("sname : ",sname)
+            $('#addServiceModal').modal('show');
+            
+            resetAddServiceModal();
+
+            $("#addServiceModal .modal-body .d-flex.justify-content-center .btn.btn-primary").prop("disabled",true);
+            $("#addServiceModal .modal-body .d-flex.justify-content-center .btn.btn-success").prop("disabled",true);
+
+            $("#addServiceModal .modal-body #serviceId").prop("disabled",true);
+            $("#addServiceModal .modal-body #serviceEnabled").prop("disabled",false);
+            $("#addServiceModal .modal-body #serviceName").prop("disabled",true);
+            $("#addServiceModal .modal-body #serviceCost").prop("disabled",false);
+
+            $("#addServiceModal .modal-body #serviceEnabled").prop("checked",sclass=='table-success'?true:false);
+            $("#addServiceModal .modal-body #serviceCost").val(scost);
+            $("#addServiceModal .modal-body #serviceName").val(sname);
+            $("#addServiceModal .modal-body #serviceName").attr("serviceId",sid);
+
+        })
+
     }
 
     $("#addServiceModal .d-flex.justify-content-center .btn.btn-primary").click(function(){
-        console.log("add button clicked")
+        //console.log("add button clicked")
+        let v = $("#serviceId").val()
+        
+        switch(v){
+            case '':
+                alert("Select Service!")
+                break;
+            case "-1":
+                addNewService();
+                break;
+            default:
+                addExistingService(v);
+                break;
+        }
+        
+    })
+
+    $("#addServiceModal .d-flex.justify-content-center .btn.btn-warning").click(async function(){
+
+        let bid = await eel.get_branchId()();
+        let sstat = $("#addServiceModal .modal-body #serviceEnabled").prop("checked");
+        let scost = $("#addServiceModal .modal-body #serviceCost").val();
+        let sid = $("#addServiceModal .modal-body #serviceName").attr("serviceId");
+
+        data = {
+            "scost":scost,
+            "sid":sid,
+            "bid":bid,
+            "sstat":(sstat?1:0)
+        }
+
+        let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/service-branch/update"
+
+        $.ajax({
+            type: "PUT",
+            url: url,
+            data:data,
+            success: function(data){
+                //renderServiceTable(data["data"]);
+                alert("Service Updated!")
+                populateServices();
+                $('#addServiceModal').modal('hide');
+            }
+        });
+
+    })
+
+    $("#addServiceModal .d-flex.justify-content-center .btn.btn-danger").click(async function(){
+
+        let bid = await eel.get_branchId()();
+        let sstat = false;
+        let scost = $("#addServiceModal .modal-body #serviceCost").val();
+        let sid = $("#addServiceModal .modal-body #serviceName").attr("serviceId");
+
+        data = {
+            "scost":scost,
+            "sid":sid,
+            "bid":bid,
+            "sstat":(sstat?1:0)
+        }
+
+        let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/service-branch/update"
+
+        $.ajax({
+            type: "PUT",
+            url: url,
+            data:data,
+            success: function(data){
+                //renderServiceTable(data["data"]);
+                alert("Service Disabled!")
+                populateServices();
+                $('#addServiceModal').modal('hide');
+            }
+        });
+
     })
 
     populateServices = async () => {
@@ -54,16 +164,79 @@ $( document ).ready(function() {
 
     }
 
-    addExistingService = (sid,bid,stat,scost) => {
+    resetServiceButtons = () => {
+        $("#addServiceModal .modal-body .d-flex.justify-content-center .btn.btn-primary").prop("disabled",false);
+        $("#addServiceModal .modal-body .d-flex.justify-content-center .btn.btn-success").prop("disabled",false);
+        $("#addServiceModal .modal-body .d-flex.justify-content-center .btn.btn-warning").prop("disabled",false);
+        $("#addServiceModal .modal-body .d-flex.justify-content-center .btn.btn-danger").prop("disabled",false);
+    }
+
+    $("button[data-target='#addServiceModal']").click(function(){
+        resetAddServiceModal();
+        $("#addServiceModal .modal-body .d-flex.justify-content-center .btn.btn-warning").prop("disabled",true);
+        $("#addServiceModal .modal-body .d-flex.justify-content-center .btn.btn-danger").prop("disabled",true);
+    })
+
+
+
+    addNewService = () => {
+        
+        let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/service/create"
+
+        let sname = '';
+        sname = $("#addServiceModal #serviceName").val()
+
+        if(sname){
+
+            data = {
+                "sname":sname,
+            }
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function(data){
+                    alert("New Service Added!")
+                    getServiceSelect();
+                    $('#addServiceModal').modal('hide');
+                }
+            });
+
+        }else{
+            alert("New Service Name must not be empty!");
+        }
+    }
+
+    addExistingService = async (sid) => {
 
         let url =  "http://"+enviVar.host+":"+enviVar.port+"/api/service-branch/create"
+
+        let bid = await eel.get_branchId()();
+        let scost = $("#addServiceModal #serviceCost").val()
+
+        if(!scost){
+            alert("No fields must be empty.");
+            return;
+        }
+
+        data = {
+            "sid":sid,
+            "scost":scost,
+            "bid":bid,
+            "sstat":1
+        }
 
         $.ajax({
             type: "POST",
             url: url,
+            data: data,
             success: function(data){
                 //renderServiceTable(data["data"]);
-                console.log("data");
+                //console.log("add service data : ",data);
+                alert("Added Service!")
+                populateServices();
+                $('#addServiceModal').modal('hide');
             }
         });
 
@@ -78,22 +251,26 @@ $( document ).ready(function() {
             switch(v){
                 case '': 
                     $("#serviceName").val("")
+                    $("#serviceCost").val("")
                     $("#serviceName").prop("disabled",true);
                     $("#serviceCost").prop("disabled",true);
                     $("#serviceEnabled").prop("disabled",true);
                     break;  
                 case "-1":
                     $("#serviceName").val("")
+                    $("#serviceCost").val("")
                     $("#serviceName").prop("disabled",false);
-                    $("#serviceCost").prop("disabled",false);
-                    $("#serviceEnabled").prop("disabled",false);
+                    $("#serviceCost").prop("disabled",true);
+                    $("#serviceEnabled").prop("disabled",true);
+                    $("#serviceEnabled").prop("checked",false);
                     break;
                 default:
                     let t = $('#serviceId :selected').text();
                     $("#serviceName").val(t)
                     $("#serviceName").prop("disabled",true);
                     $("#serviceCost").prop("disabled",false);
-                    $("#serviceEnabled").prop("disabled",false);
+                    $("#serviceEnabled").prop("disabled",true);
+                    $("#serviceEnabled").prop("checked",true);
                     break;
 
             }
@@ -317,9 +494,14 @@ $( document ).ready(function() {
         }
     });
 
+    $('#addServiceModal').on('hidden.bs.modal', function (e) {
+        resetAddServiceModal();
+      })
+
 
     populateRooms();
     populate_roomTypes();
     populateServices();
     getServiceSelect();
+
 });

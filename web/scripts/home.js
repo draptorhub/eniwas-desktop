@@ -157,7 +157,7 @@ $(document).ready(function () {
         let cust_rnum = $("#checkOutModal #checkOutForm #roomId").val();
         let ciid = $("#checkOutModal #checkOutForm #custId").val();
         let paytype = $("#checkOutModal #checkOutForm #paymode").val();
-        let tamt = $("#checkOutModal #checkOutForm #totalBill").html();
+        let tamt = $("#checkOutModal #checkOutForm #totalBill").val();
 
         data = {
             "ciid":ciid,
