@@ -699,6 +699,8 @@
                 </div>
               </div>
               <textarea readonly style="resize: none;" class="form-control" id="custAddr" rows="3" placeholder="Address"></textarea>
+              <input id="numguest" type="hidden" value="" />
+              <input id="roomtype" type="hidden" value="" />
             </div> 
           </div>
         </div>
@@ -756,6 +758,7 @@
       </div>
       <div class="modal-footer">
         <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="printBill" class="btn btn-primary">Print Bill</button>
         <button type="submit" class="btn btn-primary">Check Out</button>
       </div>
       </form>

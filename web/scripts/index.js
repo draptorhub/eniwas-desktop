@@ -15,7 +15,8 @@ $(document).ready(function(){
                 bname = data["data"][0]["bname"]
                 hname = data["data"][0]["hname"]
                 mname = data["data"][0]["mname"]
-                callStoreQuery(bid,bname,hname,mname)
+                haddr = data["data"][0]["branchAdd"]
+                callStoreQuery(bid,bname,hname,mname,haddr)
             }
           });
 
@@ -29,9 +30,9 @@ $(document).ready(function(){
             window.location.replace('./home.html')
     }
 
-    callStoreQuery = async (bid,bname,hname,mname) => {
+    callStoreQuery = async (bid,bname,hname,mname,haddr) => {
 
-        await eel.storeBranch(bid,bname,hname,mname)()
+        await eel.storeBranch(bid,bname,hname,mname,haddr)()
         //console.log("bid stored!");
         window.location.replace('./home.html')
     }

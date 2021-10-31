@@ -151,6 +151,69 @@ $(document).ready(function () {
         //console.log(advAmount,payMode);
     }
 
+    $("#printBill").click(function(){
+        
+        console.log("i am going to generate bill");
+
+        let valci = $("#checkOutModal #checkOutForm #checkindt").val();
+        let billnum = $("#checkOutModal #checkOutForm #billNum").val();
+        let roonum = $("#checkOutModal #checkOutForm #roomName").val();
+        let custdetails = $("#checkOutModal #checkOutForm #custName").val();
+        let paidamt = $("#checkOutModal #checkOutForm #paidAmount").val();
+        let dueamt = $("#checkOutModal #checkOutForm #dueAmount").val();
+        let totamt = $("#checkOutModal #checkOutForm #totalBill").val();
+        let valco = $("#checkOutModal #checkOutForm #checkoutdt").val();
+
+        let daysStayed = $("#checkOutModal #checkOutForm #checkoutdt").attr("stayday");
+        let roomCost = $("#checkOutModal #checkOutForm #roomName").attr("roomcost");
+
+        let guestnum = $("#checkOutModal #checkOutForm #numguest").val()
+        let roomtype = $("#checkOutModal #checkOutForm #roomtype").val()
+
+        let tableData = []
+
+        $("#checkOutModal #particularDesc").children().each(function(){
+            
+            let j = {}
+            j["rdate"] = $(this).find("th:first-child").html()
+            j["rdesc"] = $(this).find("td:nth-child(2)").html()
+            j["rtax"] = $(this).find("td:nth-child(3)").html()
+            j["rsubtotal"] = $(this).find("td:last-child").html()
+            
+            console.log("object",j)
+            tableData.push(j)
+
+        })
+
+        console.log("table : ",tableData)
+
+        billGeneration = {
+            checkin:valci,
+            checkout:valco,
+            paidAmt:paidamt,
+            roomTarrif:roomCost,
+            roomType:roomtype,
+            totAmt:totamt,
+            billNum:billnum,
+            custDetails:custdetails,
+            roomNum:roonum,
+            guestNum:guestnum,
+            staydays:daysStayed,
+            dueAmt:dueamt,
+            dtable:tableData,
+        }
+
+        callGenerateBill(billGeneration);
+
+    })
+
+    callGenerateBill = async (data) => {
+
+        await eel.generate_bill(data)();
+        //console.log("data : ",data);
+      
+    }
+
     checkoutAction = () =>{
 
         let url = "http://"+enviVar.host+":"+enviVar.port+"/api/checkout/create"
@@ -165,22 +228,33 @@ $(document).ready(function () {
             "tamt":tamt
         }
 
-        $.ajax({
+        let vflag = false;
+        let cardNumber = '';
+
+        if(paytype==2){
+            cardNumber = $("#checkOutModal #checkOutForm #cardNum").val()
+            if(validateCardNumber(cardNumber))
+                vflag = true;
+        }
+
+        if(paytype==2 && !vflag){
+            alert("Enter valid card number!")
+            return;
+        }else{$.ajax({
             type: "POST",
             url: url,
             data: data,
             success: function(data){
                 if(data["success"]){
-                    //console.log('bid passed : ',bid);
+                    addCardDetails(ciid,cardNumber);
                     console.log("checkout added");
                     updateRoomStat(cust_rnum,1)
-                    $('#checkOutModal').modal('hide');
-                    //getAllRoomDetails();
+                    $('#checkOutModal').modal('hide');   
                 }
                 else
                     console.log("checkout went wrong!");
             }
-          });
+          });}
 
     }
 
@@ -584,7 +658,13 @@ $(document).ready(function () {
                 $("#checkOutModal #checkOutForm #reffImg").attr("src",d["custref"])
                 $("#checkOutModal #checkOutForm #custAddr").val(d["custAddr"])
 
+                $("#checkOutModal #checkOutForm #numguest").val(d["custGuest"])
+                $("#checkOutModal #checkOutForm #roomtype").val(d["rtype"])
+
                 let days = dateDiffernce(timeAdjust(d["cidt"]))
+
+                $("#checkOutModal #checkOutForm #checkoutdt").attr("stayday",days)
+                $("#checkOutModal #checkOutForm #roomName").attr("roomcost",d["roomCharge"])
 
                 let paid = 0;
                 let due = 0;
@@ -625,10 +705,25 @@ $(document).ready(function () {
                 //$("#checkOutModal #checkOutForm #taxAmount").val(tax);
 
                 getCustomerBills(d["checkinid"])
+                getBillNumber(bid);
             }
           });
-
           //console.log("retv bill data : ",billData);
+    }
+
+    getBillNumber = (bid) => {
+
+        let url = "http://"+enviVar.host+":"+enviVar.port+"/api/checkout/getbillnum/"+bid
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(data){
+                let d = data["data"][0]["billnum"]
+                $("#checkOutModal #checkOutForm #billNum").val(d);
+            }
+        })
+
     }
 
     particularsRender = (encash,pdate,pdesc,ptax,pcost) => {
@@ -955,6 +1050,14 @@ $(document).ready(function () {
             $("#advanceForm #cardNumber").css("display","block");
         else
             $("#advanceForm #cardNumber").css("display","none");
+    })
+
+    $("#checkOutForm #paymode").change(function(){
+        
+        if($(this).val()==2)
+            $("#checkOutForm #cardNum").prop("disabled",false);
+        else
+            $("#checkOutForm #cardNum").prop("disabled",true);
     })
 
     setAction_forlinks = () => {

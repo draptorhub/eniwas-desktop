@@ -16,13 +16,15 @@ class Database:
 
     def create_login_details(self):
         sql = '''
-            CREATE TABLE IF NOT EXISTS `login-details` (
-                `bid`	TEXT NOT NULL,
-                `bname`	TEXT,
-                `hname`	TEXT,
-                `mname`	TEXT,
-                PRIMARY KEY(`bid`)
-            );
+            CREATE TABLE IF NOT EXISTS "login-details" 
+            ( 
+                `bid` TEXT NOT NULL, 
+                `bname` TEXT, 
+                `hname` TEXT, 
+                `mname` TEXT, 
+                `haddr` TEXT, 
+                PRIMARY KEY(`bid`) 
+            )
         '''
         self.conn.execute(sql)
 
@@ -36,11 +38,28 @@ class Database:
                 #'bid':str(t[0]),
                 'bname':str(t[1]),
                 'hname':str(t[2]),
-                'mname':str(t[3])
+                'mname':str(t[3]),
+                'haddr':str(t[4]),
             }
         #print('data : ',d)
         y = json.dumps(d)
         return y
+
+    def get_hotel_details(self):
+        sql = "select * from `login-details` limit 1;"
+        cursor = self.conn.execute(sql)
+        t = cursor.fetchone()
+        d = {}
+        if t :
+            d = {
+                #'bid':str(t[0]),
+                'bname':str(t[1]),
+                'hname':str(t[2]),
+                'mname':str(t[3]),
+                'haddr':str(t[4]),
+            }
+        #print('data : ',d)
+        return d
 
     def del_login(self):
         sql = "delete from `login-details`;"
@@ -55,7 +74,7 @@ class Database:
         return y
         
     def register_login_details(self,data):
-        sql = 'insert or replace into `login-details` values(?,?,?,?)'
+        sql = 'insert or replace into `login-details` values(?,?,?,?,?)'
         cur = self.conn.cursor()
         cur.execute(sql,data)
         self.conn.commit()
