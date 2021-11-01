@@ -9,7 +9,7 @@ def main():
     global d
     dir_name = os.path.expanduser("~")+'\\AppData\\Local\\'
     db_name = 'eniwas_test.db'
-    print('dbnameloc',dir_name+db_name)
+    #print('dbnameloc',dir_name+db_name)
     d = Database(dir_name+db_name)
     eel.init('web')
     eel.start('templates/index.html',jinja_templates='templates',port=0)    # Start
@@ -35,7 +35,7 @@ def generate_bill(data):
     dt["hname"] = hotel["hname"]
     dt["haddr"] = hotel["haddr"]
 
-    print("dict : ",dt)
+    #print("dict : ",dt)
 
     g = Generate_Bill(dt)
     g.printBill()

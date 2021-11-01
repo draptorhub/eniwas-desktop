@@ -41,6 +41,7 @@ class Generate_Bill:
         dirName = os.path.expanduser("~")+'\\Documents\\'
         fileName  = str(self.data["billNum"])+".docx"
         self.document.write(dirName+fileName)
+        os.startfile(dirName+fileName)
 
 if __name__=='__main__':
     sample_data = {
