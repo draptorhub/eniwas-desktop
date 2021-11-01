@@ -15,7 +15,7 @@ class Generate_Bill:
     data = None
 
     def __init__(self,data):
-        self.document = MailMerge(".\\app\\Templates\\bill_template.docx");
+        self.document = MailMerge("..\\web\\static\\bill_template.docx");
         self.data = data
         #print(self.document.get_merge_fields())
 
@@ -40,6 +40,7 @@ class Generate_Bill:
         self.document.merge_rows('rdate',self.data["dtable"])
         dirName = os.path.expanduser("~")+'\\Documents\\'
         fileName  = str(self.data["billNum"])+".docx"
+        print(dirName+fileName)
         self.document.write(dirName+fileName)
         os.startfile(dirName+fileName)
 
