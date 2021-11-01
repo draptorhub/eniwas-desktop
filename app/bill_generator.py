@@ -15,8 +15,9 @@ class Generate_Bill:
     data = None
 
     def __init__(self,data):
-        self.document = MailMerge("..\\web\\static\\bill_template.docx");
+        self.document = MailMerge("web\\static\\bill_template.docx");
         self.data = data
+        print("data r: ",str(self.data["payMode"]))
         #print(self.document.get_merge_fields())
 
     def printBill(self):
@@ -27,6 +28,7 @@ class Generate_Bill:
             hotelAddr=str(self.data["haddr"]),
             rtarrif=str(self.data["roomTarrif"]),
             rtype=str(self.data["roomType"]),
+            payMode=str(self.data["payMode"]),
             hotelName=str(self.data["hname"]),
             totAmt=str(self.data["totAmt"]),
             billnum=str(self.data["billNum"]),

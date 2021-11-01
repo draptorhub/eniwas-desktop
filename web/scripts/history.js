@@ -238,23 +238,48 @@ $(document).ready(function () {
       subData["dtable"]=dtable;
       subData["paidAmt"]=""+paid;
       subData["dueAmt"]=""+due;
-      subData["payMode"]="Card";
+      //subData["payMode"]="Card";
       callGenerateBill(billGeneration);
 
     }
 
     callGenerateBill = async (data) => {
 
-      console.log("call generate bill data : ",data);
+      //console.log("call generate bill data : ",data);
       data["roomTarrif"]=String(data["roomTarrif"])
       data["guestNum"]=String(data["guestNum"])
       await eel.generate_bill(data)();
     
   }
 
+  returnPayText = (x) =>{
+
+    let v = '';
+
+    switch(x){
+      case 1:
+        v="Cash"
+        break;
+      case 2:
+        v = "Card";
+        break;
+      case 3:
+        v="UPI"
+        break;
+      case 7:
+        v="Bill To Company";
+        break
+      case 9:
+        v="Pending";
+        break;
+    }
+
+    return v;
+  }
+
     subFinalBill = (billGeneration,custName,extraData) => {
 
-      console.log("reached sub final");
+      //console.log("reached sub final");
 
       let billDatas = billGeneration;
       let cname = custName
@@ -264,6 +289,9 @@ $(document).ready(function () {
       billDatas['roomType'] = exdata["rtype"]
       billDatas['custDetails'] = cname+'\n'+exdata["custAddr"]
       billDatas['guestNum'] = exdata["custGuest"]
+      billDatas['payMode'] = returnPayText(Number(exdata["paymode"]))
+      
+      console.log("js r : ",billDatas['payMode']);
 
       //console.log("cid",exdata["checkinid"]);
       //console.log("bdata",billDatas);

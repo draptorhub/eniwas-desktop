@@ -110,8 +110,16 @@ $(document).ready(function () {
         let payMode = $("#advanceModal #advanceForm #payMode").val()
         let cid = $("#advanceModal #advanceForm #custId").attr("cust-id");
 
+        let statement = ""
+
+        if(payMode==4){
+            statement = "Prepaid"
+        }else{
+            statement = "Room Advance"
+        }
+
         let data = {
-            "bdesc":'Room Advance',
+            "bdesc":statement,
             "btype":-1,
             "bamt":advAmount,
             "cid":cid,
@@ -153,7 +161,7 @@ $(document).ready(function () {
 
     $("#printBill").click(function(){
         
-        console.log("i am going to generate bill");
+        //console.log("i am going to generate bill");
 
         let valci = $("#checkOutModal #checkOutForm #checkindt").val();
         let billnum = $("#checkOutModal #checkOutForm #billNum").val();
@@ -170,6 +178,13 @@ $(document).ready(function () {
         let guestnum = $("#checkOutModal #checkOutForm #numguest").val()
         let roomtype = $("#checkOutModal #checkOutForm #roomtype").val()
 
+        let paytype = $("#checkOutModal #checkOutForm #paymode").find('option:selected').text();
+
+        if(paytype=='Payment Mode'){
+            alert("Select Payment Mode");
+            return;
+        }
+
         let tableData = []
 
         $("#checkOutModal #particularDesc").children().each(function(){
@@ -185,7 +200,7 @@ $(document).ready(function () {
 
         })
 
-        console.log("table : ",tableData)
+        //console.log("table : ",tableData)
 
         billGeneration = {
             checkin:valci,
@@ -200,7 +215,7 @@ $(document).ready(function () {
             guestNum:guestnum,
             staydays:daysStayed,
             dueAmt:dueamt,
-            payMode:'Cash',
+            payMode:paytype,
             dtable:tableData,
         }
 
