@@ -158,7 +158,7 @@ $(document).ready(function () {
         let valci = $("#checkOutModal #checkOutForm #checkindt").val();
         let billnum = $("#checkOutModal #checkOutForm #billNum").val();
         let roonum = $("#checkOutModal #checkOutForm #roomName").val();
-        let custdetails = $("#checkOutModal #checkOutForm #custName").val();
+        let custdetails = $("#checkOutModal #checkOutForm #custName").val()+'\n'+$("#checkOutModal #checkOutForm #custAddr").val();
         let paidamt = $("#checkOutModal #checkOutForm #paidAmount").val();
         let dueamt = $("#checkOutModal #checkOutForm #dueAmount").val();
         let totamt = $("#checkOutModal #checkOutForm #totalBill").val();
@@ -200,12 +200,15 @@ $(document).ready(function () {
             guestNum:guestnum,
             staydays:daysStayed,
             dueAmt:dueamt,
+            payMode:'Cash',
             dtable:tableData,
         }
 
         callGenerateBill(billGeneration);
 
     })
+
+    
 
     callGenerateBill = async (data) => {
 

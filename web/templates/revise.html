@@ -392,8 +392,10 @@
             </div>
     
             <div class="row my-2">
-              <div class="col-3"><input class="form-control" id="cust-days" type="number" placeholder="Days" required></div>
-              <div class="col-3"><input class="form-control" id="cust-guest" type="number" placeholder="Guests" required></div>
+              <div class="col-3"><input data-toggle="tooltip"
+                data-placement="bottom" title="No. Of Days" class="form-control" id="cust-days" type="number" placeholder="Days" required></div>
+              <div class="col-3"><input data-toggle="tooltip"
+                data-placement="bottom" title="No. Of Guests" class="form-control" id="cust-guest" type="number" placeholder="Guests" required></div>
               <div class="col-3">
                 <select id="cust-rplan" class="custom-select" required>
                   <option value="">Rate Plan</option>
@@ -416,6 +418,10 @@
       </div>
     </div>
   </div>
-
+<script>
+  $(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 </div>
 {% endblock %}
