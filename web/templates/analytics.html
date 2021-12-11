@@ -1,0 +1,125 @@
+{% extends 'layout.html' %}
+{% block title %} eNiwas | Analytics {% endblock %}
+{% block head_scripts %}
+  <script type="text/javascript" src="../scripts/analytics.js"></script>
+  <!-- <link rel="stylesheet" href="../style/index.css"> -->
+  <style>
+    
+  </style>
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="./home.html"><strong>&#10229;</strong></a>
+        </li>
+        <!-- <li class="nav-item">
+          <a data-screen="refRender" class="nav-link" href="#">Referral</a>
+        </li> -->
+      </ul>
+      <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a onclick="getReviseData()" class="nav-link">&#10227;</a>
+        </li> 
+        <li class="nav-item active">
+          <a onclick="openSearchModal()" class="nav-link">&#128269;</a>
+        </li>       
+      </ul>
+    </div>
+  </nav>
+
+  <div class="p-4 mt-2 d-flex justify-content-center" style="display: none;" id="employeeRender">
+    <!-- Table Emplyeee-->
+    <div style="width:100%;display: inline;float: left;">
+
+      <div class="p-3">
+        <table id="historyTable" class="table">
+          <thead>
+            <th>Bill#</th>
+            <th>Room#</th>
+            <th>Customer Name</th>
+            <th>Details</th>
+            <th>Bill Amount</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>102</td>
+              <td class="custName" id="">Dimple</td>
+              <td>
+                <div class="row d-flex">
+                  <div class="d-inline float-left px-2">
+                    <h1>3</h1>
+                  </div>
+                  <div class="d-inline float-left">
+                    <div class="px-2">12-10-2021</div>
+                    <div class="px-2">15-10-2021</div>
+                  </div>
+                </div>
+              </td>
+              <td>1000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="exampleModalCentered" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenteredLabel">Search</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+          <div class="my-1">
+
+            <select id="searchSelect" class="custom-select">
+              <option value="">Search By</option>
+              <option value="1">Bill Number</option>
+              <option value="2">Checkout Date</option>
+              <option value="3">Customer Name</option>
+              <option value="4">Checkin Date</option>
+            </select>
+
+          </div>
+
+          <!-- Search By Bill Number -->
+          <div style="display:none;" id="searchBill" class="my-1">
+            <input class="form-control" type="text" id="billNumber" placeholder="Bill Number">
+          </div>
+
+          <!-- Search By Checkin Date -->
+          <div style="display:none;" id="searchDate" class="my-1">
+            <input class="form-control my-1" id="startDate" type="date" data-toggle="tooltip"
+            data-placement="bottom" title="From Date" placeholder="Start Date" />
+            <input class="form-control my-1" id="endDate" type="date" data-toggle="tooltip"
+            data-placement="bottom" title="To Date" placeholder="End Date" />
+          </div>
+
+          <!-- Search By Customer Name -->
+          <div style="display:none;" id="searchCustomer" class="my-1">
+            <input class="form-control" id="customerName" type="text" placeholder="Customer Name">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="searchSubmit" class="btn btn-primary">Search</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

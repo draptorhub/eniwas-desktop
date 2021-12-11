@@ -74,6 +74,6 @@ $(document).ready(function(){
         //location.reload();
     })
 
-    getBranchDetails();
+    //getBranchDetails();
     
 });
